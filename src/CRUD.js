@@ -6,29 +6,26 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
+import axios from "axios";
 
 const CRUD  = () => {
-    const empdata = [
-        {
-            id: 1,
-            name: 'Dileep',
-            age: 25,
-            country: 'India',
-            position: 'Student',
-            wage: '7500'
-        },
-        {
-            id: 2,
-            name: 'Haritha',
-            age: 23,
-            country: 'India',
-            position: 'SDE',
-            wage: '6000'
-        }
-    ]
     const [data, setData] = useState([]);
 
     const [show, setShow] = useState(false);
+
+    useEffect(() => {
+        getData();
+    }, [])
+
+    const getData = () => {
+        axios.get('https://localhost:7261/api/Employee')
+            .then((result) => {
+                setData(result.data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -46,24 +43,86 @@ const CRUD  = () => {
     const [editPosition, setEditPosition] = useState('');
     const [editWage,setEditWage] = useState('');
 
-    useEffect(() => {
-        setData(empdata);
-    },[])
 
     const handleEdit = (id) => {
         handleShow();
+        axios.get(`https://localhost:7261/api/Employee/${id}`).then((res) => {
+                setEditID(res.data.id)
+                setEditName(res.data.name)
+                setEditAge(res.data.age)
+                setEditCountry(res.data.country)
+                setEditPosition(res.data.position)
+                setEditWage(res.data.wage)
+            }
+        )
+    }
+
+    const handleSave = () => {
+        getData()
     }
     
     const handleDelete = (id) => {
+
         if(window.confirm('Are you sure you want to delete')) {
-        alert(id)
+            console.log(id)
+            axios.delete(`https://localhost:7261/api/Employee/${id}`)
+                .then((result) => {
+                    alert("Success")
+                    getData();
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
         }
     }
 
-    const handleUpdate = (id) => {
+    const handleSubmit = () => {
+        const url = "https://localhost:7261/api/Employee"
+        const data = {
+            "name": name,
+            "age": age,
+            "country": country,
+            "position": position,
+            "wage": wage
+        }
 
+        axios.post(url,data)
+            .then((result) => {
+                getData();
+                clear()
+            })
     }
-    
+
+    const clear = () => {
+        setName('')
+        setAge('')
+        setPosition('')
+        setCountry('')
+        setWage('')
+        setEditName('')
+        setEditAge('')
+        setEditPosition('')
+        setEditCountry('')
+        setEditWage('')
+        setEditID('')
+    }
+
+    const handleUpdate = () => {
+        console.log("----->", editID)
+        const data = {
+            "id": editID,
+            "name": editName,
+            "age": editAge,
+            "country": editCountry,
+            "position": editPosition,
+            "wage": editWage
+        }
+
+        axios.put(`https://localhost:7261/api/Employee/${editID}`,data)
+            .then((result) => {
+                console.log("Updated successfully")
+            })
+    }
 
     return(
         <Fragment>  
@@ -90,7 +149,7 @@ const CRUD  = () => {
                     onChange={(e) => setWage(e.target.value)}/>
                 </Col><br/>
                 <Col>
-                    <button type="submit" className="btn btn-primary">Submit</button>
+                    <button type="submit" className="btn btn-primary" onClick={() => {handleSubmit()}}>Submit</button>
                 </Col>
                 </Row>
             </Container> <br/> 
@@ -118,8 +177,8 @@ const CRUD  = () => {
                         <td>{item.position}</td>
                         <td>{item.wage}</td>
                         <td colSpan={2}>
-                            <button className='btn btn-primary' onClick={() => {handleEdit(item.name)}}>Edit</button> &nbsp;
-                            <button className='btn btn-danger' onClick={() => {handleDelete(item.name)}}>Delete</button>
+                            <button className='btn btn-primary' onClick={() => {handleEdit(item.id)}}>Edit</button> &nbsp;
+                            <button className='btn btn-danger' onClick={() => {handleDelete(item.id)}}>Delete</button>
                         </td>
                     </tr>
                     )
@@ -154,7 +213,7 @@ const CRUD  = () => {
                         onChange={(e) => setEditWage(e.target.value)}/>
                     </Col><br/>
                     <Col>
-                        <button type="submit" className="btn btn-primary" onClick={handleEdit}>Update</button>
+                        <button type="submit" className="btn btn-primary" onClick={handleUpdate}>Update</button>
                     </Col>
                 </Col>
             </Modal.Body>
@@ -162,7 +221,7 @@ const CRUD  = () => {
             <Button variant="secondary" onClick={handleClose}>
                 Close
             </Button>
-            <Button variant="primary" onClick={handleUpdate}>
+            <Button variant="primary" onClick={handleSave}>
                 Save Changes
             </Button>
             </Modal.Footer>
