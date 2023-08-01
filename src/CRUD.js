@@ -59,6 +59,7 @@ const CRUD  = () => {
 
     const handleSave = () => {
         getData()
+        handleClose()
     }
     
     const handleDelete = (id) => {
@@ -212,18 +213,14 @@ const CRUD  = () => {
                         <input type="number" className='form-control' placeholder="Enter Wage" value={editWage} 
                         onChange={(e) => setEditWage(e.target.value)}/>
                     </Col><br/>
-                    <Col>
-                        <button type="submit" className="btn btn-primary" onClick={handleUpdate}>Update</button>
-                    </Col>
+
                 </Col>
+
             </Modal.Body>
             <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-                Close
-            </Button>
-            <Button variant="primary" onClick={handleSave}>
-                Save Changes
-            </Button>
+
+                <Button type="submit" className="btn btn-primary" onClick={handleUpdate}>Update</Button>
+                <Button variant="primary" className="btn btn-primary" onClick={handleSave}>Save Changes</Button>
             </Modal.Footer>
         </Modal>
         </Fragment>
