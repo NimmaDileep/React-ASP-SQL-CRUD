@@ -11,7 +11,6 @@
         {
             AutomaticMigrationsEnabled = false;
         }
-
         protected override void Seed(TokenAuth.API.Data.ApplicationDbContext context)
         {
             //  This method will be called after migrating to the latest version.

@@ -10,10 +10,15 @@ namespace TokenAuth.API.UserRepository
     public class UserRepo : IDisposable
     {
         ApplicationDbContext dbContext = new ApplicationDbContext();
- 
+
         public User ValidateUser(string username, string password)
         {
-            return dbContext.Users.FirstOrDefault(user => user.UserName.Equals(username, StringComparison.OrdinalIgnoreCase) && user.Password==password);
+            return dbContext.Users.FirstOrDefault(user => user.UserName.Equals(username, StringComparison.OrdinalIgnoreCase) && user.Password == password);
+        }
+
+        public User GetUserByUsername(string username)
+        {
+            return dbContext.Users.FirstOrDefault(user => user.UserName.Equals(username, StringComparison.OrdinalIgnoreCase));
         }
 
         public void Dispose()
