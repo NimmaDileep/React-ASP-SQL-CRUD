@@ -10,7 +10,7 @@ const UserLogin = ({ onLogin, onUserData }) => {
         role: "User"
     });
 
-    const [error, setError] = useState('');
+    const [fieldErrors, setFieldErrors] = useState({}); // New state for field-specific errors
     const [success, setSuccess] = useState('');
     const [form, setForm] = useState('initial');
     const [userData, setUserData] = useState();
@@ -20,18 +20,43 @@ const UserLogin = ({ onLogin, onUserData }) => {
         setUser({...user, [name]: value});
     };
 
-    const validateForm = () => {
-        if (user.username.trim() === "" || user.password.trim() === "" || (form === 'register' && user.email.trim() === "")) {
-            setError("All fields must be filled.");
-            return false;
+    const handleLoginValidations = () => {
+        let errors = {};
+
+        if (user.username.trim().length < 8) {
+            errors.username = "Username must be at least 8 characters long.";
         }
-        setError("");
-        return true;
-    }
+
+        if (user.password.trim().length < 8) {
+            errors.password = "Password must be at least 8 characters long.";
+        }
+
+        setFieldErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const handleRegisterValidations = () => {
+        let errors = {};
+
+        if (user.username.trim().length < 8) {
+            errors.username = "Username must be at least 8 characters long.";
+        }
+
+        if (user.password.trim().length < 8) {
+            errors.password = "Password must be at least 8 characters long.";
+        }
+
+        if (user.email.trim() === "" || !(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email.trim()))) {
+            errors.email = "A valid email is required.";
+        }
+
+        setFieldErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
 
     const login = async () => {
-        if (!validateForm()) return;
-
+        if (!handleLoginValidations()) return;
         const params = new URLSearchParams();
         params.append('username', user.username);
         params.append('password', user.password);
@@ -50,13 +75,13 @@ const UserLogin = ({ onLogin, onUserData }) => {
             onLogin(response.data.access_token);
             onUserData(userRes.data);
         } catch (error) {
-            setError("Invalid username or password.");
+            console.log("Error")
         }
     };
 
 
     const register = async () => {
-        if (!validateForm()) return;
+        if (!handleRegisterValidations()) return;
 
         const url = "https://localhost:44316/api/user";
         const data = {
@@ -72,10 +97,9 @@ const UserLogin = ({ onLogin, onUserData }) => {
             setForm('initial');
             setUser({ username: "", password: "", email: "", role: "User"});
         } catch (error) {
-            setError("Something went wrong. Please try again.");
+            console.log("Something went wrong. Please try again.");
         }
     };
-
 
     return (
         <div className="form-wrapper">
@@ -87,11 +111,13 @@ const UserLogin = ({ onLogin, onUserData }) => {
             ) : (
                 <>
                     <h2>{form.charAt(0).toUpperCase() + form.slice(1)}</h2>
-                    {error && <div className="error-message">{error}</div>}
                     {success && <div className="success-message">{success}</div>}
                     <input type="text" name="username" value={user.username} onChange={handleChange} placeholder="Username"/>
+                    {fieldErrors.username && <div className="error-message">{fieldErrors.username}</div>}
                     <input type="password" name="password" value={user.password} onChange={handleChange} placeholder="Password"/>
+                    {fieldErrors.password && <div className="error-message">{fieldErrors.password}</div>}
                     {form === 'register' && <input type="email" name="email" value={user.email} onChange={handleChange} placeholder="Email"/>}
+                    {fieldErrors.email && <div className="error-message">{fieldErrors.email}</div>}
                     <div className="button-container">
                         <button type="button" onClick={form === 'login' ? login : register}>{form.charAt(0).toUpperCase() + form.slice(1)}</button>
                         <button type="button" onClick={() => setForm('initial')}>Cancel</button>
