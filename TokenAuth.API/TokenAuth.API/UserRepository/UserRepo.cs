@@ -13,7 +13,12 @@ namespace TokenAuth.API.UserRepository
 
         public User ValidateUser(string username, string password)
         {
-            return dbContext.Users.FirstOrDefault(user => user.UserName.Equals(username, StringComparison.OrdinalIgnoreCase) && user.Password == password);
+            // Encrypt the password before comparing
+            string encryptedPassword = AesEncryption.EncryptString("ThisIsMyKey12345", password);
+
+            return dbContext.Users.FirstOrDefault(user =>
+                user.UserName.Equals(username, StringComparison.OrdinalIgnoreCase) &&
+                user.Password == encryptedPassword);
         }
 
         public User GetUserByUsername(string username)

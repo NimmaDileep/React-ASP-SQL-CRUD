@@ -33,11 +33,16 @@ namespace TokenAuth.API.Controllers
             }
 
             ApplicationDbContext dbContext = new ApplicationDbContext();
+
+            string encryptedPassword = AesEncryption.EncryptString("ThisIsMyKey12345", user.Password);
+            user.Password = encryptedPassword;
+
             dbContext.Users.Add(user);
             dbContext.SaveChanges();
 
             return Request.CreateResponse(HttpStatusCode.Created, user);
         }
+
 
         [Route("{username}")]
         [HttpGet]
@@ -55,11 +60,13 @@ namespace TokenAuth.API.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound, "User not found");
             }
 
+            string decryptedPassword = AesEncryption.DecryptString("ThisIsMyKey12345", user.Password);
+            user.Password = decryptedPassword;
+
             return Request.CreateResponse(HttpStatusCode.OK, user);
         }
 
 
-        // Dispose UserRepo when done
         protected override void Dispose(bool disposing)
         {
             if (disposing)

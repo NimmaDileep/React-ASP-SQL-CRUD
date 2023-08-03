@@ -63,7 +63,7 @@ const UserLogin = ({ onLogin, onUserData }) => {
             username: user.username,
             password: user.password,
             email: user.email,
-            role: user.role
+            Roles: user.role
         };
 
         try {

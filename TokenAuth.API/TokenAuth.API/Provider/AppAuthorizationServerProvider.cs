@@ -21,7 +21,7 @@ namespace TokenAuth.API.Provider
             using (UserRepo repo = new UserRepo())
             {
                 var user = repo.ValidateUser(context.UserName, context.Password);
-                if(user == null)
+                if (user == null)
                 {
                     context.SetError("invalid_grant", "Username or Password is incorrect!!!");
                     return;
