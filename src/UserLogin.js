@@ -103,10 +103,12 @@ const UserLogin = ({ onLogin, onUserData }) => {
 
     return (
         <div className="form-wrapper">
+            <text><h1>Welcome!</h1></text>
+            {form === 'initial' && success && <div className="success-message">{success}</div>}
             {form === 'initial' ? (
                 <div className="button-container">
-                    <button type="button" onClick={() => setForm('login')}>Login</button>
-                    <button type="button" onClick={() => setForm('register')}>Register</button>
+                    <button type="button" onClick={() => { setSuccess(''); setForm('login'); }}>Login</button>
+                    <button type="button" onClick={() => { setSuccess(''); setForm('register'); }}>Register</button>
                 </div>
             ) : (
                 <>
