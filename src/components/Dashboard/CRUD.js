@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import axios from "axios";
+import './Dashboard.css'
 
 const CRUD  = (props) => {
 
@@ -157,8 +158,12 @@ const CRUD  = (props) => {
                 <Container>
                     <Row>
                         <Col>
-                            <h1>Employee Data</h1>
-                            <button onClick={handleLogout} style={{ position: 'absolute', right: 30, top: 10 }}>Logout</button>
+                            <div className="flex">
+                                <div><h1>Employee Data</h1></div>
+                                <div>
+                                    <button onClick={handleLogout} >Logout</button>
+                                </div>
+                            </div>
                         </Col>
                     </Row>
                     <Row className="mt-5" style={{paddingLeft: '36px'}}>
