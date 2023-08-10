@@ -1,0 +1,32 @@
+/* Header Styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 50px;
+    background: #2c3e50; /* Deep blue shade for the header */
+    position: relative;
+    z-index: 100;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    background-color: black;
+}
+
+nav a {
+    margin: 0 20px;
+    color: #ecf0f1; /* Near-white color for contrast against the deep blue header */
+    text-decoration: none;
+    font-weight: 600; /* Make the font a bit bolder */
+    transition: color 0.3s, transform 0.3s;
+}
+
+nav a:hover {
+    color: #e74c3c; /* Vibrant red color on hover */
+    transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
+nav a:active {
+    transform: translateY(0);
+}
