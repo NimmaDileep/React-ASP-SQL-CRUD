@@ -9,3 +9,11 @@
   flex: 1;
   padding-top: 80px;
 }
+
+.dashboard-content {
+  flex: 1;
+  padding-top: 80px;
+  /* Make it larger on the screen */
+  padding: 100px; /* Adjust as needed */
+  font-size: 1.5em; /* Adjust as needed */
+}

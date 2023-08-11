@@ -1,23 +1,39 @@
 import React, { useState } from 'react';
 import './SignUp.css';
+import axios from "axios";
 
 function SignUp() {
     const [password, setPassword] = useState('');
     const [reEnterPassword, setReEnterPassword] = useState('');
-    const [fullName, setFullName] = useState('');
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [strengthText, setStrengthText] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
+
+    const handleEmailChange = (e) => {
+        setEmail(e.target.value);
+    };
+
+    const validateEmail = (email) => {
+        const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return pattern.test(email);
+    };
+
+    const validateUsername = (username) => {
+        return username && username.trim().length > 0;
+    };
+
+    const validatePassword = (password) => {
+        return password && password.trim().length >= 6;
+    };
+
+    const validateReEnterPassword = (reEnterPassword) => {
+        return reEnterPassword && reEnterPassword.trim().length >= 6;
+    };
+
+
     const handlePasswordChange = (e) => {
-    //     const pwd = e.target.value;
-    //     setPassword(pwd);
-    //
-    //     const currentStrength = getStrength(pwd);
-    //     setStrengthText(currentStrength);
-    // };
-    //
-    // const handleReEnterPasswordChange = (e) => {
-    //     setReEnterPassword(e.target.value);
         const target = e.target;
         const value = target.value;
         const name = target.name;
@@ -30,22 +46,63 @@ function SignUp() {
             setReEnterPassword(value);
         }
 
-        // If the re-entered password matches the original password, remove the error message
         if (name === "reEnterPassword" && password === value) {
             setErrorMessage('');
         }
     };
 
     const handleFullNameChange = (e) => {
-        setFullName(e.target.value);
+        setUsername(e.target.value);
     };
 
-    const handleSignUp = () => {
+    const handleSignUp = async() => {
+        setErrorMessage(''); // Reset the error message before validating
+
+        if (!validateUsername(username)) {
+            setErrorMessage("Username is required!");
+            return;
+        }
+
+        if (!validateEmail(email)) {
+            setErrorMessage("Invalid email address!");
+            return;
+        }
+
+        if (!validatePassword(password)) {
+            setErrorMessage("Password should be at least 6 characters long!");
+            return;
+        }
+
+        if (!validateReEnterPassword(reEnterPassword)) {
+            setErrorMessage("Please re-enter your password!");
+            return;
+        }
+
         if (password !== reEnterPassword) {
             setErrorMessage("Passwords do not match!");
             return;
         }
-        // Further code to handle the sign up process
+
+        const url = "https://localhost:44316/api/user";
+        const data = {
+            username: username,
+            password: password,
+            email: email,
+            Roles: "User"
+        };
+
+        try {
+            await axios.post(url, data);
+            setUsername("")
+            setEmail("")
+            setPassword("")
+            setReEnterPassword("")
+            // setSuccess("Registration successful. Proceed to login with your credentials.");
+            // setForm('initial');
+            // setUser({ username: "", password: "", email: "", role: "User"});
+        } catch (error) {
+            console.log("Something went wrong. Please try again.");
+        }
     };
 
     const getStrength = (password) => {
@@ -99,8 +156,8 @@ function SignUp() {
                         spellCheck="false"
                         className="control"
                         type="text"
-                        placeholder="Full Name"
-                        value={fullName}
+                        placeholder="Username"
+                        value={username}
                         onChange={handleFullNameChange}
                     />
                     <div id="spinner" className="spinner"></div>
@@ -111,7 +168,9 @@ function SignUp() {
                     className="control"
                     type="email"
                     placeholder="Email"
-                    defaultValue="joe@gmail.com"
+                    defaultValue=""
+                    value={email}
+                    onChange={handleEmailChange}
                 />
                 <input
                     spellCheck="false"

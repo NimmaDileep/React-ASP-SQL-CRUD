@@ -1,0 +1,111 @@
+body {
+    display: grid;
+    place-items: center;
+    margin: 0;
+    background-color: #000000;
+    background-image: url("bbblurry.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: "Euclid Circular A";
+    color: #868b94;
+    animation: rotate 5s infinite alternate linear;
+    height: 100vh;
+    overflow: auto;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+button {
+    background-color: #3498db;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+.table {
+    border-collapse: separate;
+    border-spacing: 0 15px;
+}
+
+.table tr:first-child td {
+    border-top: none;
+}
+
+.table tr:last-child td {
+    border-bottom: none;
+}
+
+.table td, .table th {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    padding: 10px;
+    position: relative;
+}
+
+.table th {
+    background-color: rgba(52, 152, 219, 0.4);
+}
+
+.table td:before, .table th:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background-color: rgba(52, 152, 219, 0.2);
+    transform: scaleY(0);
+    transition: transform 0.2s ease;
+}
+
+.table td:hover:before, .table th:hover:before {
+    transform: scaleY(1);
+}
+
+.form-control {
+    margin-bottom: 1rem;
+    border: none;
+    border-bottom: 2px solid #3498db;
+    border-radius: 0;
+    box-shadow: none;
+    transition: border-color 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: #2980b9;
+    box-shadow: none;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.btn-info {
+    background-color: #16a085;
+}
+
+.btn-info:hover {
+    background-color: #13876b;
+}

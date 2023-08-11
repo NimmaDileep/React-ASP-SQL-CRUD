@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
+import './Header.css'
+import AuthContext from "../AuthContext";
+
 
 const StyledHeader = styled.header`
   display: flex;
@@ -42,23 +45,33 @@ const ProfileLink = styled(StyledLink)`
   gap: 8px;
 `;
 
-const Header = ({ token, handleLogout }) => {
+const Header = () => {
+    const { setAuthToken, authToken, setAuthRole } = React.useContext(AuthContext);
+
+    const handleLogout = () =>{
+        setAuthToken(null)
+        setAuthRole(null)
+    }
+
     return (
         <StyledHeader>
             <NavContainer>
-                <StyledLink to="/home">Home</StyledLink>
-                <StyledLink to="/about">About</StyledLink>
-                {token ? (
+                {authToken ? (
                     <>
                         <StyledLink to="/dashboard">Dashboard</StyledLink>
                         <StyledLink to="/employees">Show Employees</StyledLink>
+                        <ProfileLink to="/profile">
+                            <FontAwesomeIcon icon={faUser} color="#ecf0f1" size="lg" />
+                            <span>Profile</span>
+                        </ProfileLink>
                         <StyledLink to="/logout" onClick={handleLogout}>Logout</StyledLink>
                     </>
                 ) : (
                     <>
+                        <StyledLink to="/home">Home</StyledLink>
+                        <StyledLink to="/about">About</StyledLink>
                         <StyledLink to="/signin">Sign In</StyledLink>
                         <StyledLink to="/signup">Sign Up</StyledLink>
-                        <StyledLink to="/profile">Profile</StyledLink>
                     </>
                 )}
             </NavContainer>

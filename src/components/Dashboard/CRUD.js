@@ -7,14 +7,16 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import axios from "axios";
-import './Dashboard.css'
+import './CRUD.css'
+import AuthContext from "../AuthContext";
 
 const CRUD  = (props) => {
-
+    const { authToken, authRole } = React.useContext(AuthContext);
     const [show, setShow] = useState(false);
     const [data, setData] = useState([]);
-    const [token, setToken] = useState(props.token); // fetch token from localStorage
-    const role = props.userData && props.userData.Roles
+    const [token, setToken] = useState(authToken);
+    const [role, setRole] = useState(authRole);
+
 
     console.log('Role----->',role)
 
@@ -29,13 +31,13 @@ const CRUD  = (props) => {
 
             setData(result.data)
         } catch (error) {
-            console.error('Error during getData:', error);  // NEW
+            console.error('Error during getData:', error);
         }
     }
 
     useEffect(() => {
         if(token) {
-            console.log('Token state updated, calling getData');  // NEW
+            console.log('Token state updated, calling getData');
             getData();
         }
     }, [token]);
@@ -153,16 +155,13 @@ const CRUD  = (props) => {
     }
 
     return (
-        <div>
+        <div className="container">
             <Fragment>
                 <Container>
                     <Row>
                         <Col>
                             <div className="flex">
                                 <div><h1>Employee Data</h1></div>
-                                <div>
-                                    <button onClick={handleLogout} >Logout</button>
-                                </div>
                             </div>
                         </Col>
                     </Row>
