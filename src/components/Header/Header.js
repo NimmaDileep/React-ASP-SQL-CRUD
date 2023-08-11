@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import './Header.css'
 import AuthContext from "../AuthContext";
-
+import logo from './conquer-tech.png';
 
 const StyledHeader = styled.header`
   display: flex;
@@ -16,6 +16,7 @@ const StyledHeader = styled.header`
   position: relative;
   z-index: 100;
 `;
+
 
 const NavContainer = styled.nav`
   display: flex;
@@ -48,9 +49,9 @@ const ProfileLink = styled(StyledLink)`
 const Header = () => {
     const { setAuthToken, authToken, setAuthRole } = React.useContext(AuthContext);
 
-    const handleLogout = () =>{
-        setAuthToken(null)
-        setAuthRole(null)
+    const handleLogout = () => {
+        setAuthToken(null);
+        setAuthRole(null);
     }
 
     return (
@@ -58,6 +59,7 @@ const Header = () => {
             <NavContainer>
                 {authToken ? (
                     <>
+                        <img src={logo} alt="Company Logo" className="header-logo" />
                         <StyledLink to="/dashboard">Dashboard</StyledLink>
                         <StyledLink to="/employees">Show Employees</StyledLink>
                         <ProfileLink to="/profile">
@@ -68,6 +70,7 @@ const Header = () => {
                     </>
                 ) : (
                     <>
+                        <img src={logo} alt="Company Logo" className="header-logo" />
                         <StyledLink to="/home">Home</StyledLink>
                         <StyledLink to="/about">About</StyledLink>
                         <StyledLink to="/signin">Sign In</StyledLink>
@@ -75,7 +78,6 @@ const Header = () => {
                     </>
                 )}
             </NavContainer>
-
         </StyledHeader>
     );
 }

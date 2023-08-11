@@ -51,13 +51,15 @@ button {
 }
 
 .login-card {
-    width: 500px;
-    padding: 80px 40px 32px;
+    width: 450px; /* changed width */
+    padding: 60px 30px 24px; /* adjusted padding */
     border-radius: 1.25rem;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(26px);
     text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* added shadow */
 }
+
 
 .login-card > h2 {
     font-size: 40px;

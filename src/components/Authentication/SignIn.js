@@ -59,13 +59,17 @@ function SignIn() {
         try {
             const response = await axios.post('https://localhost:44316/token', params, config);
             const userRes = await axios.get(`https://localhost:44316/api/user/${userName}`);
+            localStorage.setItem('accessToken', response.data.access_token);
+            localStorage.setItem('userRole', userRes.data.Roles);
+            localStorage.setItem('userData', JSON.stringify(userRes.data));
+
             setUserData(userRes.data);
             console.log('Access Token',response.data);
             // console.log('Access Token',response.data.access_token);
             console.log('User Data',userRes.data);
             // console.log('User Role', userRes.data.Roles);
             setAuthToken(response.data.access_token);
-            // setAuthRole(userRes.data.Roles)
+            setAuthRole(userRes.data.Roles)
             navigate('/dashboard');
         } catch (error) {
             console.log("Error")

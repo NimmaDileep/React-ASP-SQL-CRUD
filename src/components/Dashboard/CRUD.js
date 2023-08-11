@@ -2,21 +2,27 @@ import  React, {useState, useEffect, Fragment}  from 'react';
 import Table from 'react-bootstrap/Table';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import axios from "axios";
 import './CRUD.css'
 import AuthContext from "../AuthContext";
+import AddUserModal from "./AddUserModal";
+import SearchBar from "./SearchBar";
+import EditUserModal from "./EditUserModal";
 
-const CRUD  = (props) => {
+const CRUD  = () => {
     const { authToken, authRole } = React.useContext(AuthContext);
     const [show, setShow] = useState(false);
     const [data, setData] = useState([]);
-    const [token, setToken] = useState(authToken);
-    const [role, setRole] = useState(authRole);
+    const initialToken = localStorage.getItem('accessToken');
+    const initialRole = localStorage.getItem('userRole');
+    const [token, setToken] = useState(initialToken);
+    const [role, setRole] = useState(initialRole);
+    const [originalData, setOriginalData] = useState([]);
 
+    const [searchTerm, setSearchTerm] = useState('');
 
     console.log('Role----->',role)
 
@@ -29,7 +35,9 @@ const CRUD  = (props) => {
                 }
             });
 
-            setData(result.data)
+            setOriginalData(result.data);
+            setData(result.data);
+
         } catch (error) {
             console.error('Error during getData:', error);
         }
@@ -44,12 +52,6 @@ const CRUD  = (props) => {
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
-    const [name, setName] = useState('');
-    const [age, setAge] = useState('');
-    const [country, setCountry] = useState('');
-    const [position, setPosition] = useState('');
-    const [wage, setWage] = useState('');
 
     const [editID, setEditID] = useState('');
     const [editName, setEditName] = useState('');
@@ -75,10 +77,6 @@ const CRUD  = (props) => {
         )
     }
 
-    const handleLogout = () => {
-        window.location.href = "http://localhost:3000";
-    }
-
     const handleDelete = (id) => {
         if(window.confirm('Are you sure you want to delete')) {
             axios.delete(`https://localhost:44316/api/Employee/${id}`, {
@@ -96,40 +94,20 @@ const CRUD  = (props) => {
         }
     }
 
-    const handleSubmit = () => {
-        const url = "https://localhost:44316/api/Employee"
-        const data = {
-            "name": name,
-            "age": age,
-            "country": country,
-            "position": position,
-            "wage": wage
-        }
+    const handleSearchChange = (event) => {
+        const searchTerm = event.target.value.toLowerCase();
+        const filteredData = originalData.filter(item => {  // Here, we are using originalData, not data
+            return (
+                item.Name.toLowerCase().includes(searchTerm) ||
+                item.Age.toString().includes(searchTerm) ||
+                item.Country.toLowerCase().includes(searchTerm) ||
+                item.Position.toLowerCase().includes(searchTerm) ||
+                item.Wage.toString().includes(searchTerm)
+            );
+        });
+        setData(filteredData);
+    };
 
-        axios.post(url,data, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then((result) => {
-                getData();
-                clear()
-            })
-    }
-
-    const clear = () => {
-        setName('')
-        setAge('')
-        setPosition('')
-        setCountry('')
-        setWage('')
-        setEditName('')
-        setEditAge('')
-        setEditPosition('')
-        setEditCountry('')
-        setEditWage('')
-        setEditID('')
-    }
 
     const handleUpdate = () => {
         const data = {
@@ -160,43 +138,21 @@ const CRUD  = (props) => {
                 <Container>
                     <Row>
                         <Col>
-                            <div className="flex">
+                            <div className="flex justify-content-center">
                                 <div><h1>Employee Data</h1></div>
                             </div>
                         </Col>
                     </Row>
-                    <Row className="mt-5" style={{paddingLeft: '36px'}}>
-                        {role === 'Admin' && (
-                            <>
-                                <Col>
-                                    <input type="text" className='form-control' placeholder="Enter Name" value={name}
-                                           onChange={(e) => setName(e.target.value)}/>
-                                </Col>
-                                <Col>
-                                    <input type="number" className='form-control' placeholder="Enter Age" value={age}
-                                           onChange={(e) => setAge(e.target.value)}/>
-                                </Col>
-                                <Col>
-                                    <input type="text" className='form-control' placeholder="Enter Country" value={country}
-                                           onChange={(e) => setCountry(e.target.value)}/>
-                                </Col>
-                                <Col>
-                                    <input type="text" className='form-control' placeholder="Enter Position" value={position}
-                                           onChange={(e) => setPosition(e.target.value)}/>
-                                </Col>
-                                <Col>
-                                    <input type="number" className='form-control' placeholder="Enter Wage" value={wage}
-                                           onChange={(e) => setWage(e.target.value)}/>
-                                </Col>
-                                <Col>
-                                    <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Submit</button>
-                                </Col>
-                            </>
-                        )}
-                    </Row>
                 </Container>
                 <br/>
-                <div style={{ width: '80%', marginRight: '10%', marginLeft:'10%', paddingTop:'15px'}}>
+                {role === 'Admin' && (
+                    <>
+                        <input className="form-control" type="text" placeholder="Search.." onChange={handleSearchChange} />
+                        <br />
+                    </>
+                )}
+
+                <div className= "container-fluid">
                     <Table striped bordered hover>
                         <thead>
                         <tr>
@@ -235,34 +191,19 @@ const CRUD  = (props) => {
                         }
                         </tbody>
                     </Table>
+                    <AddUserModal token={token} afterSubmit={getData} />
                 </div>
-                <Modal show={show && (role === 'Admin' || role === 'SuperUser')} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Edit Employee</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <input type="text" className='form-control mb-3' placeholder="Enter Name" value={editName}
-                               onChange={(e) => setEditName(e.target.value)}/>
-                        <input type="number" className='form-control mb-3' placeholder="Enter Age" value={editAge}
-                               onChange={(e) => setEditAge(e.target.value)}/>
-                        <input type="text" className='form-control mb-3' placeholder="Enter Country" value={editCountry}
-                               onChange={(e) => setEditCountry(e.target.value)}/>
-                        <input type="text" className='form-control mb-3' placeholder="Enter Position" value={editPosition}
-                               onChange={(e) => setEditPosition(e.target.value)}/>
-                        <input type="number" className='form-control mb-3' placeholder="Enter Wage" value={editWage}
-                               onChange={(e) => setEditWage(e.target.value)}/>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <div>
-                            <Button variant="secondary" onClick={handleClose} style={{ marginRight: '10px' }}>Close</Button>
-                        </div>
-                        {role === 'Admin' || role === 'SuperUser' ? (
-                            <div>
-                                <Button variant="primary" onClick={() => {handleUpdate()}}>Save Changes</Button>
-                            </div>
-                        ) : null}
-                    </Modal.Footer>
-                </Modal>
+                <EditUserModal
+                    show={show}
+                    handleClose={handleClose}
+                    editName={editName} setEditName={setEditName}
+                    editAge={editAge} setEditAge={setEditAge}
+                    editCountry={editCountry} setEditCountry={setEditCountry}
+                    editPosition={editPosition} setEditPosition={setEditPosition}
+                    editWage={editWage} setEditWage={setEditWage}
+                    handleUpdate={handleUpdate}
+                    role={role}
+                />
             </Fragment>
         </div>
     )
