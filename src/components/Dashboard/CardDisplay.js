@@ -12,8 +12,19 @@ const CardDisplay = () => {
     const [token, setToken] = useState(initialToken);
     const [isLoading, setIsLoading] = useState(true);
 
+    const imageUrls = [
+        "https://api.dicebear.com/6.x/adventurer/svg?seed=Midnight",
+        "https://api.dicebear.com/6.x/adventurer/svg?seed=Bandit",
+        "https://api.dicebear.com/6.x/adventurer/svg?seed=Milo",
+        "https://api.dicebear.com/6.x/adventurer/svg?seed=Garfield",
+        "https://api.dicebear.com/6.x/adventurer/svg?seed=Sam",
+        "https://api.dicebear.com/6.x/adventurer/svg?seed=Willow",
+        "https://api.dicebear.com/6.x/avataaars/svg?seed=Garfield",
+        "https://api.dicebear.com/6.x/avataaars/svg?seed=Bella",
+    ];
+
     useEffect(() => {
-        if(token) {
+        if (token) {
             const fetchData = async () => {
                 setIsLoading(true);
                 try {
@@ -44,7 +55,7 @@ const CardDisplay = () => {
                         data.map((item, index) => (
                             <Col key={index} md={4}>
                                 <Card className="mb-4">
-                                    <Card.Img variant="top" src="URL_TO_RANDOM_IMAGE" />
+                                    <Card.Img variant="top" src={imageUrls[Math.floor(Math.random() * imageUrls.length)]} />
                                     <Card.Body>
                                         <Card.Title>{item.Name}</Card.Title>
                                         <Card.Text>Age: {item.Age}</Card.Text>
@@ -63,3 +74,4 @@ const CardDisplay = () => {
 }
 
 export default CardDisplay;
+
