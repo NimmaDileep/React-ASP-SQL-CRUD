@@ -19,6 +19,22 @@ body {
     border-radius: 10px;
 }
 
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+}
+
+.input-wrapper {
+    max-width: 400px;
+    width: 100%;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+
 .flex {
     display: flex;
     justify-content: space-between;
@@ -40,7 +56,7 @@ button:hover {
 }
 
 .table {
-    border-collapse: separate;
+    /*border-collapse: separate;*/
     border-spacing: 0 15px;
 }
 
@@ -84,9 +100,11 @@ button:hover {
     margin-bottom: 1rem;
     border: none;
     border-bottom: 2px solid #3498db;
-    border-radius: 0;
+    border-radius: 5px;
     box-shadow: none;
     transition: border-color 0.2s ease;
+    /*margin-left: 10px;*/
+    /*max-width: 577px;*/
 }
 
 .form-control:focus {
@@ -112,4 +130,15 @@ button:hover {
 
 .table td, .table th {
 color: white;
+
+}
+.table{
+    border-radius: 4px;
+}
+
+.loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20vh;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
@@ -12,7 +12,6 @@ const StyledHeader = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 10px 50px;
-  background: #2c3e50;
   position: relative;
   z-index: 100;
 `;
@@ -25,7 +24,7 @@ const NavContainer = styled.nav`
 
 const StyledLink = styled(Link)`
   margin: 0 20px;
-  color: #ecf0f1;
+  color: ${props => props.isActive ? '#e74c3c' : '#ecf0f1'};
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s, transform 0.3s;
@@ -48,6 +47,7 @@ const ProfileLink = styled(StyledLink)`
 
 const Header = () => {
     const { setAuthToken, authToken, setAuthRole } = React.useContext(AuthContext);
+    const location = useLocation();
 
     const handleLogout = () => {
         setAuthToken(null);
@@ -60,21 +60,21 @@ const Header = () => {
                 {authToken ? (
                     <>
                         <img src={logo} alt="Company Logo" className="header-logo" />
-                        <StyledLink to="/dashboard">Dashboard</StyledLink>
-                        <StyledLink to="/employees">Show Employees</StyledLink>
-                        <ProfileLink to="/profile">
+                        <StyledLink to="/dashboard" isActive={location.pathname === "/dashboard"}>Dashboard</StyledLink>
+                        <StyledLink to="/employees" isActive={location.pathname === "/employees"}>Show Employees</StyledLink>
+                        <ProfileLink to="/profile" isActive={location.pathname === "/profile"}>
                             <FontAwesomeIcon icon={faUser} color="#ecf0f1" size="lg" />
                             <span>Profile</span>
                         </ProfileLink>
-                        <StyledLink to="/logout" onClick={handleLogout}>Logout</StyledLink>
+                        <StyledLink to="/logout" onClick={handleLogout} isActive={location.pathname === "/logout"}>Logout</StyledLink>
                     </>
                 ) : (
                     <>
                         <img src={logo} alt="Company Logo" className="header-logo" />
-                        <StyledLink to="/home">Home</StyledLink>
-                        <StyledLink to="/about">About</StyledLink>
-                        <StyledLink to="/signin">Sign In</StyledLink>
-                        <StyledLink to="/signup">Sign Up</StyledLink>
+                        <StyledLink to="/home" isActive={location.pathname === "/home"}>Home</StyledLink>
+                        <StyledLink to="/about" isActive={location.pathname === "/about"}>About</StyledLink>
+                        <StyledLink to="/signin" isActive={location.pathname === "/signin"}>Sign In</StyledLink>
+                        <StyledLink to="/signup" isActive={location.pathname === "/signup"}>Sign Up</StyledLink>
                     </>
                 )}
             </NavContainer>

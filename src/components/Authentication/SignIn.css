@@ -23,7 +23,7 @@ body {
     background-repeat: no-repeat;
     background-size: 200vh;
     font-family: "Euclid Circular A";
-    color: #868b94;
+    color: white;
     animation: rotate 5s infinite alternate linear;
 }
 

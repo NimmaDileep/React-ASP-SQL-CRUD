@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import './SignUp.css';
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
+import { Modal, Button } from 'react-bootstrap';
+
 
 function SignUp() {
     const [password, setPassword] = useState('');
@@ -9,6 +12,8 @@ function SignUp() {
     const [email, setEmail] = useState('');
     const [strengthText, setStrengthText] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const navigate = useNavigate();
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
 
 
     const handleEmailChange = (e) => {
@@ -97,6 +102,8 @@ function SignUp() {
             setEmail("")
             setPassword("")
             setReEnterPassword("")
+            setShowSuccessModal(true);
+            // navigate('/signin')
             // setSuccess("Registration successful. Proceed to login with your credentials.");
             // setForm('initial');
             // setUser({ username: "", password: "", email: "", role: "User"});
@@ -201,6 +208,21 @@ function SignUp() {
                 {errorMessage && <div className="error-message">{errorMessage}</div>}
                 <button className="control" type="button" onClick={handleSignUp}>JOIN NOW</button>
             </form>
+            <Modal show={showSuccessModal} onHide={() => setShowSuccessModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Success</Modal.Title>
+                </Modal.Header>
+                <Modal.Body><p>Signup successful!</p></Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={() => {
+                        setShowSuccessModal(false);
+                        navigate('/signin');
+                    }}>
+                        OK
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
         </div>
     );
 }

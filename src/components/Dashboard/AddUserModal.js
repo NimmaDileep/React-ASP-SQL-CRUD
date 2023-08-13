@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import axios from "axios";
+import {toast} from "react-toastify";
 
 const AddUserModal = ({ token, afterSubmit }) => {
     const [show, setShow] = useState(false);
@@ -72,7 +73,7 @@ const AddUserModal = ({ token, afterSubmit }) => {
             })
                 .then((result) => {
                     afterSubmit();
-
+                    toast.success('Employee added successfully :)');
                     setName('');
                     setAge('');
                     setCountry('');

@@ -189,3 +189,32 @@ button {
     margin-bottom: 20px;
 }
 
+.modal-header {
+    color: black;
+}
+
+
+.modal-body {
+    padding-top: 15px;
+    color: black;
+}
+
+
+/*.modal-footer {*/
+/*    border: none;*/
+/*    padding: 5px;*/
+/*}*/
+/*.modal-dialog {*/
+/*    max-width: 350px;*/
+/*}*/
+
+/*.modal-content {*/
+/*    padding: 15px;*/
+/*}*/
+/*.modal-title {*/
+/*    font-size: 18px;*/
+/*}*/
+
+/*.modal-footer .btn {*/
+/*    padding: 5px 15px;*/
+/*}*/

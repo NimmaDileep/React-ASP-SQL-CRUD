@@ -9,8 +9,10 @@ import axios from "axios";
 import './CRUD.css'
 import AuthContext from "../AuthContext";
 import AddUserModal from "./AddUserModal";
-import SearchBar from "./SearchBar";
 import EditUserModal from "./EditUserModal";
+import {FidgetSpinner} from 'react-loader-spinner';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CRUD  = () => {
     const { authToken, authRole } = React.useContext(AuthContext);
@@ -21,12 +23,12 @@ const CRUD  = () => {
     const [token, setToken] = useState(initialToken);
     const [role, setRole] = useState(initialRole);
     const [originalData, setOriginalData] = useState([]);
-
-    const [searchTerm, setSearchTerm] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
 
     console.log('Role----->',role)
 
     const getData = async () => {
+        setIsLoading(true);
         console.log('Calling getData with token:', token);  // NEW
         try {
             const result = await axios.get('https://localhost:44316/api/Employee', {
@@ -41,6 +43,8 @@ const CRUD  = () => {
         } catch (error) {
             console.error('Error during getData:', error);
         }
+        await new Promise(r => setTimeout(r, 1000));
+        setIsLoading(false);
     }
 
     useEffect(() => {
@@ -85,7 +89,7 @@ const CRUD  = () => {
                 }
             })
                 .then((result) => {
-                    alert("Success")
+                    toast.success('Employee deleted successfully!');
                     getData();
                 })
                 .catch((error) => {
@@ -126,6 +130,7 @@ const CRUD  = () => {
         })
             .then((result) => {
                 console.log("Updated successfully")
+                toast.success('Employee updated successfully!');
                 getData()
                 handleClose()
             })
@@ -134,6 +139,23 @@ const CRUD  = () => {
 
     return (
         <div className="container">
+            <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+            {isLoading ? (
+                <div className="loader-container">
+                    <FidgetSpinner
+                        height="100"
+                        width="100"
+                        color="#4fa94d"
+                        wrapperStyle={{}}
+                        wrapperClass=""
+                        visible={true}
+                        ariaLabel="three-circles-rotating"
+                        outerCircleColor=""
+                        innerCircleColor=""
+                        middleCircleColor=""
+                    />
+                </div>
+            ) : (
             <Fragment>
                 <Container>
                     <Row>
@@ -145,12 +167,11 @@ const CRUD  = () => {
                     </Row>
                 </Container>
                 <br/>
-                {role === 'Admin' && (
-                    <>
+                <div className="search-container">
+                    <div className="input-wrapper">
                         <input className="form-control" type="text" placeholder="Search.." onChange={handleSearchChange} />
-                        <br />
-                    </>
-                )}
+                    </div>
+                </div>
 
                 <div className= "container-fluid">
                     <Table striped bordered hover>
@@ -191,7 +212,11 @@ const CRUD  = () => {
                         }
                         </tbody>
                     </Table>
-                    <AddUserModal token={token} afterSubmit={getData} />
+                    {role === 'Admin' && (
+                        <div style={{display: "flex", justifyContent: "center"}}>
+                            <AddUserModal token={token} afterSubmit={getData} />
+                        </div>
+                    )}
                 </div>
                 <EditUserModal
                     show={show}
@@ -205,6 +230,7 @@ const CRUD  = () => {
                     role={role}
                 />
             </Fragment>
+                )}
         </div>
     )
 }
