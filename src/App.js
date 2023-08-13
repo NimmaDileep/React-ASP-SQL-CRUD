@@ -1,19 +1,19 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-import LandingPage from './components/LandingPage/LandingPage';
-import Dashboard from './components/Dashboard/Dashboard';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
-import UserLogin from "./TestExtraCode/UserLogin";
 import SignUp from "./components/Authentication/SignUp";
-import './App.css'
+import './App.css';
 import SignIn from "./components/Authentication/SignIn";
 import CRUD from "./components/Dashboard/CRUD";
 import Home from "./components/LandingPage/Home";
 import About from "./components/LandingPage/About";
-import AuthContext from './components/AuthContext'
-import Profile from './components/Profile/Profile'
-
+import AuthContext from './components/AuthContext';
+import Profile from './components/Profile/Profile';
+import CardDisplay from "./components/Dashboard/CardDisplay";
+import {Bar} from "react-chartjs-2";
+import ConsultantDashboard from "./components/Dashboard/Consultant/ConsultantDashboard";
+import ConsultantForm from "./components/Dashboard/Consultant/ConsultantForm";
 
 function MainContent() {
     const location = useLocation();
@@ -26,10 +26,12 @@ function MainContent() {
                 <Route path="/signin" element={<SignIn />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/home" element={<Home />} />
-                <Route path="/dashboard" element={<CRUD />} />
+                <Route path="/dashboard" element={<CardDisplay />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/logout" element={<SignIn />} />
                 <Route path="/employees" element={<CRUD />} />
+                <Route path="/consultant" element={ <ConsultantDashboard />} />
+                <Route path="/submissionForm" element={ <ConsultantForm />} />
             </Routes>
         </main>
     );
@@ -43,7 +45,6 @@ function App() {
     const [authToken, setAuthToken] = React.useState(initialToken);
     const [authRole, setAuthRole] = React.useState(initialRole);
     const [userData, setUserData] = React.useState(initialUserData);
-
 
     React.useEffect(() => {
         if (authToken) {
@@ -63,7 +64,6 @@ function App() {
         }
     }, [authToken]);
 
-
     return (
         <Router>
             <AuthContext.Provider value={{ authToken, setAuthToken, authRole, setAuthRole }}>
@@ -74,6 +74,5 @@ function App() {
         </Router>
     );
 }
-
 
 export default App;

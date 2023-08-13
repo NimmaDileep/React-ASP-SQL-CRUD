@@ -12,7 +12,6 @@ const StyledHeader = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 10px 50px;
-  position: relative;
   z-index: 100;
 `;
 
@@ -60,8 +59,12 @@ const Header = () => {
                 {authToken ? (
                     <>
                         <img src={logo} alt="Company Logo" className="header-logo" />
+                        <StyledLink to="/home" isActive={location.pathname === "/home"}>Home</StyledLink>
+                        <StyledLink to="/about" isActive={location.pathname === "/about"}>About</StyledLink>
                         <StyledLink to="/dashboard" isActive={location.pathname === "/dashboard"}>Dashboard</StyledLink>
-                        <StyledLink to="/employees" isActive={location.pathname === "/employees"}>Show Employees</StyledLink>
+                        <StyledLink to="/employees" isActive={location.pathname === "/employees"}>Show Consultants</StyledLink>
+                        <StyledLink to="/consultant" isActive={location.pathname === "/consultant"}>Consultant Dashboard</StyledLink>
+                        <StyledLink to="/submissionForm" isActive={location.pathname === "/submissionForm"}>New Submission</StyledLink>
                         <ProfileLink to="/profile" isActive={location.pathname === "/profile"}>
                             <FontAwesomeIcon icon={faUser} color="#ecf0f1" size="lg" />
                             <span>Profile</span>
