@@ -13,7 +13,20 @@
 .dashboard-content {
   flex: 1;
   padding-top: 80px;
-  /* Make it larger on the screen */
-  padding: 100px; /* Adjust as needed */
-  font-size: 1.5em; /* Adjust as needed */
+  padding: 100px;
+  font-size: 1.5em;
 }
+
+/*.main-content {*/
+/*  flex: 1;*/
+/*  padding-top: 80px;*/
+/*  max-width: 1200px;  !* or any other value you prefer *!*/
+/*  margin: 0 auto;  !* centers the block horizontally *!*/
+/*  box-sizing: border-box;*/
+/*}*/
+
+/*.dashboard-content {*/
+/*  flex: 1;*/
+/*  padding: 100px;*/
+/*  font-size: 1.5em;*/
+/*}*/

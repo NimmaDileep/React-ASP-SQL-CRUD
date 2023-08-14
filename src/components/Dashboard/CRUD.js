@@ -138,10 +138,10 @@ const CRUD  = () => {
     }
 
     return (
-        <div className="container">
+        <div className="crudContainer_container">
             <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
             {isLoading ? (
-                <div className="loader-container">
+                <div className="crudContainer_loader-container">
                     <FidgetSpinner
                         height="100"
                         width="100"
@@ -156,19 +156,19 @@ const CRUD  = () => {
                     />
                 </div>
             ) : (
-            <Fragment>
-                <Container>
-                    <Row>
-                        <Col>
-                            <div className="flex justify-content-center">
-                                <div><h1>Employee Data</h1></div>
-                            </div>
-                        </Col>
-                    </Row>
-                </Container>
-                <br/>
-                <div className="search-container">
-                    <div className="input-wrapper">
+                <Fragment>
+                    <Container>
+                        <Row>
+                            <Col>
+                                <div className="crudContainer_flex">
+                                    <div><h1>Consultants Data</h1></div>
+                                </div>
+                            </Col>
+                        </Row>
+                    </Container>
+                    <br />
+                    <div className="crudContainer_search-container">
+                        <div className="crudContainer_input-wrapper">
                         <input className="form-control" type="text" placeholder="Search.." onChange={handleSearchChange} />
                     </div>
                 </div>
