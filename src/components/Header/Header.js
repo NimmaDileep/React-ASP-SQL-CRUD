@@ -7,6 +7,7 @@ import './Header.css'
 import AuthContext from "../AuthContext";
 import logo from './conquer-tech.png';
 
+
 const StyledHeader = styled.header`
   display: flex;
   justify-content: space-between;
@@ -44,9 +45,38 @@ const ProfileLink = styled(StyledLink)`
   gap: 8px;
 `;
 
+const MobileMenuButton = styled.button`
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
+
+const MobileMenu = styled.div`
+  display: ${props => props.open ? 'block' : 'none'};
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: slategrey;
+  
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
+
 const Header = () => {
     const { setAuthToken, authToken, setAuthRole } = React.useContext(AuthContext);
+    const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
     const location = useLocation();
+
+    const toggleMobileMenu = () => {
+        setMobileMenuOpen(!mobileMenuOpen);
+    }
 
     const handleLogout = () => {
         setAuthToken(null);
@@ -55,16 +85,19 @@ const Header = () => {
 
     return (
         <StyledHeader>
-            <NavContainer>
+            <img src={logo} alt="Company Logo" className="header-logo" />
+            <MobileMenuButton onClick={toggleMobileMenu}>☰</MobileMenuButton>
+            <NavContainer style={{ display: mobileMenuOpen ? 'block' : 'flex' }}>
                 {authToken ? (
                     <>
-                        <img src={logo} alt="Company Logo" className="header-logo" />
                         <StyledLink to="/home" isActive={location.pathname === "/home"}>Home</StyledLink>
                         <StyledLink to="/about" isActive={location.pathname === "/about"}>About</StyledLink>
                         <StyledLink to="/dashboard" isActive={location.pathname === "/dashboard"}>Dashboard</StyledLink>
                         <StyledLink to="/employees" isActive={location.pathname === "/employees"}>Show Consultants</StyledLink>
                         <StyledLink to="/consultant" isActive={location.pathname === "/consultant"}>Consultant Dashboard</StyledLink>
                         <StyledLink to="/submissionForm" isActive={location.pathname === "/submissionForm"}>New Submission</StyledLink>
+                        <StyledLink to="/signin" isActive={location.pathname === "/signin"}>SignIn</StyledLink>
+                        <StyledLink to="/signup" isActive={location.pathname === "/signup"}>SignUp</StyledLink>
                         <ProfileLink to="/profile" isActive={location.pathname === "/profile"}>
                             <FontAwesomeIcon icon={faUser} color="#ecf0f1" size="lg" />
                             <span>Profile</span>
@@ -81,6 +114,33 @@ const Header = () => {
                     </>
                 )}
             </NavContainer>
+            <MobileMenu open={mobileMenuOpen}>
+                {authToken ? (
+                    <>
+                        <StyledLink to="/home" isActive={location.pathname === "/home"}>Home</StyledLink>
+                        <StyledLink to="/about" isActive={location.pathname === "/about"}>About</StyledLink>
+                        <StyledLink to="/dashboard" isActive={location.pathname === "/dashboard"}>Dashboard</StyledLink>
+                        <StyledLink to="/employees" isActive={location.pathname === "/employees"}>Show Consultants</StyledLink>
+                        <StyledLink to="/consultant" isActive={location.pathname === "/consultant"}>Consultant Dashboard</StyledLink>
+                        <StyledLink to="/submissionForm" isActive={location.pathname === "/submissionForm"}>New Submission</StyledLink>
+                        <StyledLink to="/signin" isActive={location.pathname === "/signin"}>SignIn</StyledLink>
+                        <StyledLink to="/signup" isActive={location.pathname === "/signup"}>SignUp</StyledLink>
+                        <ProfileLink to="/profile" isActive={location.pathname === "/profile"}>
+                            <FontAwesomeIcon icon={faUser} color="#ecf0f1" size="lg" />
+                            <span>Profile</span>
+                        </ProfileLink>
+                        <StyledLink to="/logout" onClick={handleLogout} isActive={location.pathname === "/logout"}>Logout</StyledLink>
+                    </>
+                ) : (
+                    <>
+                        <img src={logo} alt="Company Logo" className="header-logo" />
+                        <StyledLink to="/home" isActive={location.pathname === "/home"}>Home</StyledLink>
+                        <StyledLink to="/about" isActive={location.pathname === "/about"}>About</StyledLink>
+                        <StyledLink to="/signin" isActive={location.pathname === "/signin"}>Sign In</StyledLink>
+                        <StyledLink to="/signup" isActive={location.pathname === "/signup"}>Sign Up</StyledLink>
+                    </>
+                )}
+            </MobileMenu>
         </StyledHeader>
     );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './SignUp.css';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
@@ -14,7 +14,16 @@ function SignUp() {
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
     const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [role, setRole] = useState('');
+    const [showRecruiterDropdown, setShowRecruiterDropdown] = useState(false);
+    const [recruiters, setRecruiters] = useState([]);
+    const [selectedRecruiter, setSelectedRecruiter] = useState('');
 
+    useEffect(() => {
+        // Fetch your recruiters here or hard-code it for now
+        const fetchedRecruiters = ["John Doe", "Jane Smith", "Robert Brown"];
+        setRecruiters(fetchedRecruiters);
+    }, []);
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -60,7 +69,25 @@ function SignUp() {
         setUsername(e.target.value);
     };
 
+    const handleRoleChange = (e) => {
+        setRole(e.target.value);
+        if (e.target.value === "Consultant") {
+            setShowRecruiterDropdown(true);
+        } else {
+            setShowRecruiterDropdown(false);
+            setSelectedRecruiter(''); // Reset selected recruiter if role is not consultant
+        }
+    };
+
     const handleSignUp = async() => {
+        let assignedRole;
+
+        if (role === "Consultant") {
+            assignedRole = "User";
+        } else if (role === "Recruiter") {
+            assignedRole = "Admin";
+        }
+
         setErrorMessage(''); // Reset the error message before validating
 
         if (!validateUsername(username)) {
@@ -93,7 +120,7 @@ function SignUp() {
             username: username,
             password: password,
             email: email,
-            Roles: "User"
+            Roles: assignedRole
         };
 
         try {
@@ -179,6 +206,31 @@ function SignUp() {
                     value={email}
                     onChange={handleEmailChange}
                 />
+                <select
+                    value={role}
+                    onChange={handleRoleChange}
+                    className="control"
+                >
+                    <option value="" disabled>Select Role</option>
+                    <option value="Consultant">Consultant</option>
+                    <option value="Recruiter">Recruiter</option>
+                </select>
+
+                {showRecruiterDropdown && (
+                    <select
+                        value={selectedRecruiter}
+                        onChange={(e) => setSelectedRecruiter(e.target.value)}
+                        className="control"
+                    >
+                        <option value="" disabled>Select your recruiter</option>
+                        {recruiters.map(recruiter => (
+                            <option key={recruiter} value={recruiter}>
+                                {recruiter}
+                            </option>
+                        ))}
+                    </select>
+                )}
+
                 <input
                     spellCheck="false"
                     className="control"

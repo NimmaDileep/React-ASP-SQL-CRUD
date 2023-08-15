@@ -7,7 +7,6 @@ const Profile = () => {
     // const [phone, setPhone] = useState('123-456-7890');
 
     const handleSubmit = () => {
-        // Logic to update the user details
     };
 
     return (

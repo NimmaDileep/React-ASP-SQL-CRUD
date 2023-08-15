@@ -3,7 +3,7 @@ import './Footer.css';
 
 const Footer = () => {
     return (
-        <footer className="footer-container">
+        <footer className="footer-container" >
             © 2023 Employee Management App
         </footer>
     );
