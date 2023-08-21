@@ -1,19 +1,20 @@
-.consultant-form-container {
+.combined-form-container {
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     padding: 30px;
     border-radius: 12px;
     max-width: 600px;
-        margin: 30px auto;
+    min-width: 600px;
+    margin: 30px auto;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
-.consultant-form-container h2 {
+.combined-form-container h2 {
     text-align: center;
     color: #333;
     margin-bottom: 30px;
 }
 
-.consultant-form-container form {
+.combined-form-container form {
     display: flex;
     flex-direction: column;
 }
@@ -29,7 +30,7 @@
     color: #555;
 }
 
-.input-group input, .input-group select {
+.input-group input, .input-group select, .input-group textarea {
     width: 100%;
     padding: 12px 15px;
     border: 1px solid #ccc;
@@ -38,12 +39,12 @@
     transition: border-color 0.3s;
 }
 
-.input-group input:focus, .input-group select:focus {
+.input-group input:focus, .input-group select:focus, .input-group textarea:focus {
     border-color: #4CAF50;
     outline: none;
 }
 
-.consultant-form-container button {
+.combined-form-container button {
     padding: 12px 20px;
     background-color: #4CAF50;
     border: none;
@@ -54,16 +55,10 @@
     transition: background-color 0.3s, transform 0.3s;
 }
 
-.consultant-form-container button:hover {
+.combined-form-container button:hover {
     background-color: #45a049;
     transform: scale(1.05);
 }
-
-#status .status-submitted { background-color: #4CAF50; }
-#status .status-interviewed { background-color: #2196F3; }
-#status .status-rejected { background-color: #F44336; }
-#status .status-pending { background-color: #FFEB3B; }
-#status .status-vendor-call { background-color: #9E9E9E; }
 
 .row-container {
     display: flex;
@@ -88,7 +83,7 @@
         width: 100%;
     }
 
-    .form-container form {
+    .combined-form-container form {
         display: flex;
         flex-wrap: wrap;
         flex-direction: column;

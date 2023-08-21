@@ -44,31 +44,33 @@ const CardDisplay = () => {
     }, [token]);
 
     return (
-        <div className="card-container">
-            <Container>
-                <Row>
-                    {isLoading ? (
-                        <div className="loader-container">
-                            <FidgetSpinner height="100" width="100" color="#4fa94d" />
-                        </div>
-                    ) : (
-                        data.map((item, index) => (
-                            <Col key={index} md={4}>
-                                <Card className="mb-4">
-                                    <Card.Img variant="top" src={imageUrls[Math.floor(Math.random() * imageUrls.length)]} />
-                                    <Card.Body>
-                                        <Card.Title>{item.Name}</Card.Title>
-                                        <Card.Text>Age: {item.Age}</Card.Text>
-                                        <Card.Text>Country: {item.Country}</Card.Text>
-                                        <Card.Text>Position: {item.Position}</Card.Text>
-                                        <Card.Text>Wage: {item.Wage}</Card.Text>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                        ))
-                    )}
-                </Row>
-            </Container>
+        <div>
+            {isLoading ? (
+                    <FidgetSpinner height="100" width="100" color="#4fa94d" />
+            ) : (
+                <div className="card-container">
+                    <Container>
+                        <Row>
+                            {
+                                data.map((item, index) => (
+                                    <Col key={index} md={4}>
+                                        <Card className="mb-4">
+                                            <Card.Img variant="top" src={imageUrls[Math.floor(Math.random() * imageUrls.length)]} />
+                                            <Card.Body>
+                                                <Card.Title>{item.Name}</Card.Title>
+                                                <Card.Text>Age: {item.Age}</Card.Text>
+                                                <Card.Text>Country: {item.Country}</Card.Text>
+                                                <Card.Text>Position: {item.Position}</Card.Text>
+                                                <Card.Text>Wage: {item.Wage}</Card.Text>
+                                            </Card.Body>
+                                        </Card>
+                                    </Col>
+                                ))
+                            }
+                        </Row>
+                    </Container>
+                </div>
+            )}
         </div>
     )
 }

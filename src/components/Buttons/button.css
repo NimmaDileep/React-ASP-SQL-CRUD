@@ -1,0 +1,12 @@
+.btn.btn-primary.login-btn{
+   background-color: black;
+   padding: 20px 40px;
+}
+
+.btn.btn-primary.logout-btn{
+   background-color: green;
+}
+
+.btn.btn-primary.signup-btn{
+   background-color: red;
+}

@@ -1,147 +1,63 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-import './Header.css'
+import './HeaderStyles.css';
 import AuthContext from "../AuthContext";
 import logo from './conquer-tech.png';
 
-
-const StyledHeader = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 50px;
-  z-index: 100;
-`;
-
-
-const NavContainer = styled.nav`
-  display: flex;
-  align-items: center;
-`;
-
-const StyledLink = styled(Link)`
-  margin: 0 20px;
-  color: ${props => props.isActive ? '#e74c3c' : '#ecf0f1'};
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.3s, transform 0.3s;
-
-  &:hover {
-    color: #e74c3c;
-    transform: translateY(-2px);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-`;
-
-const ProfileLink = styled(StyledLink)`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
-
-const MobileMenuButton = styled.button`
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-
-  @media (max-width: 768px) {
-    display: block;
-  }
-`;
-
-const MobileMenu = styled.div`
-  display: ${props => props.open ? 'block' : 'none'};
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  background-color: slategrey;
-  
-  @media (max-width: 768px) {
-    display: block;
-  }
-`;
-
 const Header = () => {
     const { setAuthToken, authToken, setAuthRole } = React.useContext(AuthContext);
-    const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
     const location = useLocation();
-
-    const toggleMobileMenu = () => {
-        setMobileMenuOpen(!mobileMenuOpen);
-    }
+    const [menuOpen, setMenuOpen] = useState(false);
 
     const handleLogout = () => {
         setAuthToken(null);
         setAuthRole(null);
     }
 
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
+    }
+
     return (
-        <StyledHeader>
+        <header className="header">
             <img src={logo} alt="Company Logo" className="header-logo" />
-            <MobileMenuButton onClick={toggleMobileMenu}>☰</MobileMenuButton>
-            <NavContainer style={{ display: mobileMenuOpen ? 'block' : 'flex' }}>
+            <button className="hamburger" onClick={toggleMenu}>☰</button>
+            <nav className={`nav-container ${menuOpen ? 'open' : ''}`}>
                 {authToken ? (
                     <>
-                        <StyledLink to="/home" isActive={location.pathname === "/home"}>Home</StyledLink>
-                        <StyledLink to="/about" isActive={location.pathname === "/about"}>About</StyledLink>
-                        <StyledLink to="/dashboard" isActive={location.pathname === "/dashboard"}>Dashboard</StyledLink>
-                        <StyledLink to="/employees" isActive={location.pathname === "/employees"}>Show Consultants</StyledLink>
-                        <StyledLink to="/consultant" isActive={location.pathname === "/consultant"}>Consultant Dashboard</StyledLink>
-                        <StyledLink to="/submissionForm" isActive={location.pathname === "/submissionForm"}>New Submission</StyledLink>
-                        <StyledLink to="/signin" isActive={location.pathname === "/signin"}>SignIn</StyledLink>
-                        <StyledLink to="/signup" isActive={location.pathname === "/signup"}>SignUp</StyledLink>
-                        <ProfileLink to="/profile" isActive={location.pathname === "/profile"}>
-                            <FontAwesomeIcon icon={faUser} color="#ecf0f1" size="lg" />
+                        <Link className={`styled-link ${location.pathname === "/home" ? 'active' : ''}`} to="/home">Home</Link>
+                        {/*<Link className={`styled-link ${location.pathname === "/dashboard" ? 'active' : ''}`} to="/dashboard">Dashboard</Link>*/}
+                        {/*<Link className={`styled-link ${location.pathname === "/employees" ? 'active' : ''}`} to="/employees">Show Consultants</Link>*/}
+                        {/*<Link className={`styled-link ${location.pathname === "/consultant" ? 'active' : ''}`} to="/consultant">Consultant Dashboard</Link>*/}
+                        <Link className={`styled-link ${location.pathname === "/submissionForm" ? 'active' : ''}`} to="/submissionForm">New Submission</Link>
+                        <Link className={`styled-link ${location.pathname === "/signin" ? 'active' : ''}`} to="/signin">SignIn</Link>
+                        <Link className={`styled-link ${location.pathname === "/signup" ? 'active' : ''}`} to="/signup">SignUp</Link>
+                        <Link className={`profile-link ${location.pathname === "/profile" ? 'active' : ''}`} to="/profile">
+                            <FontAwesomeIcon icon={faUser} color="#000000" size="lg" />
                             <span>Profile</span>
-                        </ProfileLink>
-                        <StyledLink to="/logout" onClick={handleLogout} isActive={location.pathname === "/logout"}>Logout</StyledLink>
+                        </Link>
+                        <Link className={`styled-link ${location.pathname === "/logout" ? 'active' : ''}`} to="/logout" onClick={handleLogout}>Logout</Link>
                     </>
                 ) : (
                     <>
-                        <img src={logo} alt="Company Logo" className="header-logo" />
-                        <StyledLink to="/home" isActive={location.pathname === "/home"}>Home</StyledLink>
-                        <StyledLink to="/about" isActive={location.pathname === "/about"}>About</StyledLink>
-                        <StyledLink to="/signin" isActive={location.pathname === "/signin"}>Sign In</StyledLink>
-                        <StyledLink to="/signup" isActive={location.pathname === "/signup"}>Sign Up</StyledLink>
+                        <Link className={`styled-link ${location.pathname === "/home" ? 'active' : ''}`} to="/home">Home</Link>
+                        {/*<Link className={`styled-link ${location.pathname === "/dashboard" ? 'active' : ''}`} to="/dashboard">Dashboard</Link>*/}
+                        {/*<Link className={`styled-link ${location.pathname === "/employees" ? 'active' : ''}`} to="/employees">Show Consultants</Link>*/}
+                        {/*<Link className={`styled-link ${location.pathname === "/consultant" ? 'active' : ''}`} to="/consultant">Consultant Dashboard</Link>*/}
+                        <Link className={`styled-link ${location.pathname === "/submissionForm" ? 'active' : ''}`} to="/submissionForm">New Submission</Link>
+                        <Link className={`styled-link ${location.pathname === "/signin" ? 'active' : ''}`} to="/signin">SignIn</Link>
+                        <Link className={`styled-link ${location.pathname === "/signup" ? 'active' : ''}`} to="/signup">SignUp</Link>
+                        <Link className={`styled-link ${location.pathname === "/profile" ? 'active' : ''}`} to="/profile">
+                            <FontAwesomeIcon icon={faUser} color="black" size="md" />{' '}
+                            Profile
+                        </Link>
+                        <Link className={`styled-link ${location.pathname === "/logout" ? 'active' : ''}`} to="/logout" onClick={handleLogout}>Logout</Link>
                     </>
                 )}
-            </NavContainer>
-            <MobileMenu open={mobileMenuOpen}>
-                {authToken ? (
-                    <>
-                        <StyledLink to="/home" isActive={location.pathname === "/home"}>Home</StyledLink>
-                        <StyledLink to="/about" isActive={location.pathname === "/about"}>About</StyledLink>
-                        <StyledLink to="/dashboard" isActive={location.pathname === "/dashboard"}>Dashboard</StyledLink>
-                        <StyledLink to="/employees" isActive={location.pathname === "/employees"}>Show Consultants</StyledLink>
-                        <StyledLink to="/consultant" isActive={location.pathname === "/consultant"}>Consultant Dashboard</StyledLink>
-                        <StyledLink to="/submissionForm" isActive={location.pathname === "/submissionForm"}>New Submission</StyledLink>
-                        <StyledLink to="/signin" isActive={location.pathname === "/signin"}>SignIn</StyledLink>
-                        <StyledLink to="/signup" isActive={location.pathname === "/signup"}>SignUp</StyledLink>
-                        <ProfileLink to="/profile" isActive={location.pathname === "/profile"}>
-                            <FontAwesomeIcon icon={faUser} color="#ecf0f1" size="lg" />
-                            <span>Profile</span>
-                        </ProfileLink>
-                        <StyledLink to="/logout" onClick={handleLogout} isActive={location.pathname === "/logout"}>Logout</StyledLink>
-                    </>
-                ) : (
-                    <>
-                        <img src={logo} alt="Company Logo" className="header-logo" />
-                        <StyledLink to="/home" isActive={location.pathname === "/home"}>Home</StyledLink>
-                        <StyledLink to="/about" isActive={location.pathname === "/about"}>About</StyledLink>
-                        <StyledLink to="/signin" isActive={location.pathname === "/signin"}>Sign In</StyledLink>
-                        <StyledLink to="/signup" isActive={location.pathname === "/signup"}>Sign Up</StyledLink>
-                    </>
-                )}
-            </MobileMenu>
-        </StyledHeader>
+            </nav>
+        </header>
     );
 }
 

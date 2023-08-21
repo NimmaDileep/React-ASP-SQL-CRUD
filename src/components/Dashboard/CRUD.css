@@ -1,17 +1,17 @@
-body {
-    display: grid;
-    place-items: center;
-    margin: 0;
-    background-color: #000000;
-    background-image: url("bbblurry.svg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    font-family: "Euclid Circular A";
-    color: #868b94;
-    animation: rotate 5s infinite alternate linear;
-    height: 100vh;
-    overflow: auto;
-}
+/*body {*/
+/*    display: grid;*/
+/*    place-items: center;*/
+/*    margin: 0;*/
+/*    !*background-color: #000000;*!*/
+/*    !*background-image: url("bbblurry.svg");*!*/
+/*    background-repeat: no-repeat;*/
+/*    background-size: cover;*/
+/*    !*font-family: "Euclid Circular A";*!*/
+/*    !*color: #868b94;*!*/
+/*    !*animation: rotate 5s infinite alternate linear;*!*/
+/*    height: 100vh;*/
+/*    overflow: auto;*/
+/*}*/
 
 .crudContainer_input-container {
     background-color: rgba(255, 255, 255, 0.1);

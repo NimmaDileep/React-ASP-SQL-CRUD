@@ -5,7 +5,7 @@ function Home() {
     return (
         <div className="home-container">
             <div className="intro-section">
-                <h1>Welcome to Conquer Tech Innovations IT Consultant Management Application</h1>
+                <h1>Welcome to SMART Application</h1>
                 <p>Our leading platform helps you manage, track, and streamline consultant submissions to your top vendors.</p>
             </div>
             <div className="card-section">
