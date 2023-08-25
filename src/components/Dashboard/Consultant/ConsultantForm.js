@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import axios from "axios";
 import './ConsultantForm.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ConsultantForm = () => {
+    const [consultants, setConsultants] = useState([]);
     const [consultantNames, setConsultantNames] = useState([]);
     const initialToken = localStorage.getItem('accessToken');
     const [token, setToken] = useState(initialToken);
@@ -34,6 +37,7 @@ const ConsultantForm = () => {
                         }
                     });
                     setConsultantNames(result.data.map(item => item.Name));
+                    setConsultants(result.data);
                 } catch (error) {
                     console.error('Error during fetchData:', error);
                 }
@@ -53,24 +57,74 @@ const ConsultantForm = () => {
         setHasLoadedFromLocalStorage(true);
     }, []);
 
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        const updatedFormData = {
-            ...formData,
-            [name]: value
-        };
-        setFormData(updatedFormData);
+        if (name === 'name') {
+            const selectedConsultant = consultants.find(c => c.Name === value);
+            if (selectedConsultant) {
+                setFormData({
+                    ...formData,
+                    employeeId: selectedConsultant.Id,
+                    name: selectedConsultant.Name,
+                    role: selectedConsultant.Role || "",
+                    client: selectedConsultant.Client || "",
+                    vendor: selectedConsultant.Vendor || ""
+                });
+            }
+        } else {
+            setFormData({
+                ...formData,
+                [name]: value
+            });
+        }
     };
+
+    const clearForm = () => {
+        setFormData({
+            name: "",
+            date: "",
+            role: "",
+            client: "",
+            vendor: "",
+            vendorName: "",
+            status: ""
+        });
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        localStorage.removeItem('formData');
-    };
 
-    return (
+        const submissionData = {
+            EmployeeId: formData.employeeId,
+            Date: formData.date,
+            Role: formData.role,
+            Client: formData.client,
+            VendorCompany: formData.vendor,
+            VendorName: formData.vendorName,
+            Status: formData.status
+        };
+
+        try {
+            await axios.post(`https://localhost:44316/api/submission`, submissionData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            toast.success('Submission successfully added');
+            setHasLoadedFromLocalStorage(false);
+            clearForm();
+            localStorage.removeItem('formData');
+        } catch (error) {
+            console.error('Error during submission:', error);
+        }
+    }
+
+        return (
         <div className="consultant-form-container">
+            <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
             <h2>New Submission</h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} >
                 <div className="row-container">
                     <div className="input-group">
                         <label htmlFor="name">Name:</label>

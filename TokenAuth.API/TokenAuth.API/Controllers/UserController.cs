@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Web;
 using System.Net.Http;
 using System.Web.Http;
 using TokenAuth.API.Data;
@@ -33,7 +34,6 @@ namespace TokenAuth.API.Controllers
             }
 
             ApplicationDbContext dbContext = new ApplicationDbContext();
-
             string encryptedPassword = AesEncryption.EncryptString("ThisIsMyKey12345", user.Password);
             user.Password = encryptedPassword;
 
@@ -64,6 +64,38 @@ namespace TokenAuth.API.Controllers
             user.Password = decryptedPassword;
 
             return Request.CreateResponse(HttpStatusCode.OK, user);
+        }
+
+        [Route("{username}")]
+        [HttpPut]
+        public HttpResponseMessage PutUser(string username, User updatedUser)
+        {
+            if (string.IsNullOrEmpty(username))
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Username cannot be empty");
+            }
+
+            var existingUser = userRepo.GetUserByUsername(username);
+
+            if (existingUser == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, "User not found");
+            }
+
+            existingUser.UserName = updatedUser.UserName ?? existingUser.UserName;
+            existingUser.Email = updatedUser.Email ?? existingUser.Email;
+
+            if (!string.IsNullOrEmpty(updatedUser.Password))
+            {
+                string encryptedPassword = AesEncryption.EncryptString("ThisIsMyKey12345", updatedUser.Password);
+                existingUser.Password = encryptedPassword;
+            }
+
+            ApplicationDbContext dbContext = new ApplicationDbContext();
+            dbContext.Entry(existingUser).State = System.Data.Entity.EntityState.Modified; // Mark entity as modified
+            dbContext.SaveChanges();
+
+            return Request.CreateResponse(HttpStatusCode.OK, existingUser);
         }
 
 

@@ -2,9 +2,10 @@
 using Microsoft.Owin.Security.OAuth;
 using Owin;
 using System;
-using System.Threading.Tasks;
 using System.Web.Http;
 using TokenAuth.API.Provider;
+using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Extensions;
 
 [assembly: OwinStartup(typeof(TokenAuth.API.Startup))]
 
@@ -14,6 +15,8 @@ namespace TokenAuth.API
     {
         public void Configuration(IAppBuilder app)
         {
+            app.UseCookieAuthentication(new CookieAuthenticationOptions());
+            app.UseStageMarker(PipelineStage.Authenticate);
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
 
             OAuthAuthorizationServerOptions options = new OAuthAuthorizationServerOptions

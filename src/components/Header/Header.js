@@ -14,11 +14,7 @@ const Header = () => {
     const handleLogout = () => {
         setAuthToken(null);
         setAuthRole(null);
-
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('userRole');
-        localStorage.removeItem('userData');
-
+        localStorage.clear();
     };
 
     const toggleMenu = () => {
