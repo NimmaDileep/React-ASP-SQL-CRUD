@@ -1,8 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import GenericForm from '../Forms/GenericForm';
 import './SignUp.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { Modal, Button } from 'react-bootstrap';
 
-const SignUP = () => {
+const SignUp = () => {
+    const navigate = useNavigate();
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+
     const fields = [
         {
             type: 'text',
@@ -10,6 +16,13 @@ const SignUP = () => {
             label: 'Username',
             required: true,
             placeholder: 'Enter your username'
+        },
+        {
+            type: 'email',
+            name: 'email',
+            label: 'Email',
+            required: true,
+            placeholder: 'Enter your email'
         },
         {
             type: 'password',
@@ -20,30 +33,37 @@ const SignUP = () => {
         },
         {
             type: 'password',
-            name: 'confirm password',
-            label: 'Password',
+            name: 'confirmPassword',
+            label: 'Confirm Password',
             required: true,
             placeholder: 'Re-enter your password'
         },
-        {
-            type: 'email',
-            name: 'email',
-            label: 'Email',
-            required: true,
-            placeholder: 'Enter your email'
-        }
     ];
 
-    const handleSignIn = (event) => {
+    const handleSignUp = async (event) => {
         event.preventDefault();
 
-        const { username, password } = event.target.elements;
+        const { username, email, password, confirmPassword } = event.target.elements;
 
-        // Authenticate the user here
-        console.log('Username:', username.value);
-        console.log('Password:', password.value);
+        if (password.value !== confirmPassword.value) {
+            console.log('Passwords do not match!'); // You might want to display this in the UI.
+            return;
+        }
 
-        // Once authenticated, you can redirect or update the UI accordingly.
+        const url = "https://localhost:44316/api/user";
+        const data = {
+            username: username.value,
+            password: password.value,
+            email: email.value,
+            Roles: "User"
+        };
+
+        try {
+            await axios.post(url, data);
+            setShowSuccessModal(true);
+        } catch (error) {
+            console.log("Something went wrong. Please try again.");
+        }
     };
 
     return (
@@ -51,11 +71,24 @@ const SignUP = () => {
             <GenericForm
                 title="SIGN UP"
                 fields={fields}
-                onSubmit={handleSignIn}
+                onSubmit={handleSignUp}
             />
+            <Modal show={showSuccessModal} onHide={() => setShowSuccessModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Success</Modal.Title>
+                </Modal.Header>
+                <Modal.Body><p>Signup successful!</p></Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={() => {
+                        setShowSuccessModal(false);
+                        navigate('/signin');
+                    }}>
+                        OK
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
 
-export default SignUP;
-
+export default SignUp;

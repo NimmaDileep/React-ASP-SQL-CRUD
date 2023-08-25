@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router} from 'react-router-dom';
+import {BrowserRouter as Router} from 'react-router-dom';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import './App.css';
@@ -16,7 +16,7 @@ function App() {
 
     React.useEffect(() => {
         if (authToken) {
-            const tokenDuration = 3600000;
+            const tokenDuration = 1800000;
             const logoutTimer = setTimeout(() => {
                 setAuthToken(null);
                 setAuthRole(null);
@@ -36,7 +36,7 @@ function App() {
         <Router>
             <AuthContext.Provider value={{ authToken, setAuthToken, authRole, setAuthRole }}>
                 <Header />
-                <Main />
+                <Main authToken={authToken} />
                 <Footer />
             </AuthContext.Provider>
         </Router>

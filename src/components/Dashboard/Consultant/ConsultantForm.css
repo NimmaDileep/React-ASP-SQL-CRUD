@@ -44,7 +44,8 @@
 }
 
 .consultant-form-container button {
-    padding: 12px 20px;
+    width: 25%;
+    margin: auto;
     background-color: #4CAF50;
     border: none;
     border-radius: 6px;

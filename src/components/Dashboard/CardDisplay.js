@@ -26,8 +26,8 @@ const CardDisplay = () => {
     useEffect(() => {
         if (token) {
             const fetchData = async () => {
-                setIsLoading(true);
                 try {
+                    setIsLoading(true);
                     const result = await axios.get('https://localhost:44316/api/Employee', {
                         headers: {
                             'Authorization': `Bearer ${token}`
@@ -44,7 +44,7 @@ const CardDisplay = () => {
     }, [token]);
 
     return (
-        <div>
+        <div className={`${isLoading ? 'disabledContainer' : ''}`}>
             {isLoading ? (
                     <FidgetSpinner height="100" width="100" color="#4fa94d" />
             ) : (
@@ -53,7 +53,7 @@ const CardDisplay = () => {
                         <Row>
                             {
                                 data.map((item, index) => (
-                                    <Col key={index} md={4}>
+                                    <Col key={index} md={3}>
                                         <Card className="mb-4">
                                             <Card.Img variant="top" src={imageUrls[Math.floor(Math.random() * imageUrls.length)]} />
                                             <Card.Body>

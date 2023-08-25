@@ -4,7 +4,7 @@ import './Footer.css';
 const Footer = () => {
     return (
         <footer className="footer-container" >
-            © 2023 Employee Management App
+            © 2023 SMART APP
         </footer>
     );
 };

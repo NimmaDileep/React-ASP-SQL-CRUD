@@ -13,6 +13,7 @@ import EditUserModal from "./EditUserModal";
 import {FidgetSpinner} from 'react-loader-spinner';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Pagination } from 'react-bootstrap';
 
 const CRUD  = () => {
     const { authToken, authRole } = React.useContext(AuthContext);
@@ -24,18 +25,24 @@ const CRUD  = () => {
     const [role, setRole] = useState(initialRole);
     const [originalData, setOriginalData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 3;
+    const [totalPages, setTotalPages] = useState(0);
 
     console.log('Role----->',role)
 
     const getData = async () => {
         setIsLoading(true);
-        console.log('Calling getData with token:', token);  // NEW
+        console.log('Calling getData with token:', token);
         try {
             const result = await axios.get('https://localhost:44316/api/Employee', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
+
+            const totalPages = Math.ceil(result.data.length / itemsPerPage);
+            setTotalPages(totalPages);
 
             setOriginalData(result.data);
             setData(result.data);
@@ -63,6 +70,34 @@ const CRUD  = () => {
     const [editCountry, setEditCountry] = useState('');
     const [editPosition, setEditPosition] = useState('');
     const [editWage,setEditWage] = useState('');
+
+    useEffect(() => {
+        localStorage.setItem('editFormData', JSON.stringify({
+            id: editID,
+            name: editName,
+            age: editAge,
+            country: editCountry,
+            position: editPosition,
+            wage: editWage
+        }));
+    }, [editID, editName, editAge, editCountry, editPosition, editWage]);
+
+    useEffect(() => {
+        const savedFormData = localStorage.getItem('editFormData');
+        if (savedFormData) {
+            const parsedData = JSON.parse(savedFormData);
+            setEditID(parsedData.id);
+            setEditName(parsedData.name);
+            setEditAge(parsedData.age);
+            setEditCountry(parsedData.country);
+            setEditPosition(parsedData.position);
+            setEditWage(parsedData.wage);
+        }
+    }, []);
+
+    const startIdx = (currentPage - 1) * itemsPerPage;
+    const endIdx = startIdx + itemsPerPage;
+    const currentItems = data.slice(startIdx, endIdx);
 
     const handleEdit = (id) => {
         handleShow();
@@ -133,14 +168,15 @@ const CRUD  = () => {
                 toast.success('Employee updated successfully!');
                 getData()
                 handleClose()
+                localStorage.removeItem('editFormData');
             })
 
     }
 
     return (
-        <div className="crudContainer_container">
-            <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
-            {isLoading ? (
+        <div className={`crudContainer_container ${isLoading ? 'disabledContainer' : ''}`}>
+        <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+            {isLoading || !data.length ? (
                 <div className="crudContainer_loader-container">
                     <FidgetSpinner
                         height="100"
@@ -156,80 +192,85 @@ const CRUD  = () => {
                     />
                 </div>
             ) : (
-                <Fragment>
-                    <Container>
-                        <Row>
-                            <Col>
-                                <div className="crudContainer_flex">
-                                    <div><h1>Consultants Data</h1></div>
-                                </div>
-                            </Col>
-                        </Row>
-                    </Container>
-                    <br />
-                    <div className="crudContainer_search-container">
-                        <div className="crudContainer_input-wrapper">
-                        <input className="form-control" type="text" placeholder="Search.." onChange={handleSearchChange} />
+                <div className="employeeCrudContainer">
+                    <Fragment>
+                        <Container>
+                            <Row>
+                                <Col md={8} xs={12} className="mb-3 mb-md-0">
+                                    <div className="crudContainer_input-wrapper">
+                                        <input className="form-control" type="text" placeholder="Search.." onChange={handleSearchChange} />
+                                    </div>
+                                </Col>
+                                {role === 'Admin' && (
+                                    <Col md={4} xs={12} className="text-right">
+                                        <AddUserModal token={token} afterSubmit={getData} />
+                                    </Col>
+                                )}
+                            </Row>
+                        </Container>
+                        <br/>
+                        <Container>
+                        <div className= "container-fluid overflow-auto">
+                        <Table striped bordered hover>
+                            <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Name</th>
+                                <th>Age</th>
+                                <th>Country</th>
+                                <th>Position</th>
+                                <th>Wage</th>
+                                {(role === 'Admin' || role === 'SuperUser') && <th>Actions</th>}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            { currentItems && currentItems.length ?
+                                currentItems.map((item, index) => {
+                                    return(
+                                        <tr key = {index}>
+                                            <td>{index + 1 + (itemsPerPage * (currentPage - 1))}</td>
+                                            <td>{item.Name}</td>
+                                            <td>{item.Age}</td>
+                                            <td>{item.Country}</td>
+                                            <td>{item.Position}</td>
+                                            <td>{item.Wage}</td>
+                                            {(role === 'Admin' || role === 'SuperUser') && (
+                                                <td>
+                                                    {role === 'Admin' && (
+                                                        <Button variant="danger" onClick={() => handleDelete(item.Id)} style={{ marginRight: '10px' }}>Delete</Button>
+                                                    )}
+                                                    <Button variant="info" onClick={() => handleEdit(item.Id)}>Edit</Button>
+                                                </td>
+                                            )}
+                                        </tr>
+                                    )
+                                })
+                                : null
+                            }
+                            </tbody>
+                        </Table>
+                    <Pagination className="justify-content-center mt-3">
+                        {[...Array(totalPages).keys()].map((page) => (
+                            <Pagination.Item key={page + 1} active={page + 1 === currentPage} onClick={() => setCurrentPage(page + 1)}>
+                                {page + 1}
+                            </Pagination.Item>
+                        ))}
+                    </Pagination>
                     </div>
+                        </Container>
+                    <EditUserModal
+                        show={show}
+                        handleClose={handleClose}
+                        editName={editName} setEditName={setEditName}
+                        editAge={editAge} setEditAge={setEditAge}
+                        editCountry={editCountry} setEditCountry={setEditCountry}
+                        editPosition={editPosition} setEditPosition={setEditPosition}
+                        editWage={editWage} setEditWage={setEditWage}
+                        handleUpdate={handleUpdate}
+                        role={role}
+                    />
+                </Fragment>
                 </div>
-
-                <div className= "container-fluid">
-                    <Table striped bordered hover>
-                        <thead>
-                        <tr>
-                            <th>S.No</th>
-                            <th>Name</th>
-                            <th>Age</th>
-                            <th>Country</th>
-                            <th>Position</th>
-                            <th>Wage</th>
-                            {(role === 'Admin' || role === 'SuperUser') && <th>Actions</th>}
-                        </tr>
-                        </thead>
-                        <tbody>
-                        { data && data.length ?
-                            data.map((item, index) => {
-                                return(
-                                    <tr key = {index}>
-                                        <td>{index + 1}</td>
-                                        <td>{item.Name}</td>
-                                        <td>{item.Age}</td>
-                                        <td>{item.Country}</td>
-                                        <td>{item.Position}</td>
-                                        <td>{item.Wage}</td>
-                                        {(role === 'Admin' || role === 'SuperUser') && (
-                                            <td>
-                                                {role === 'Admin' && (
-                                                    <Button variant="danger" onClick={() => handleDelete(item.Id)} style={{ marginRight: '10px' }}>Delete</Button>
-                                                )}
-                                                <Button variant="info" onClick={() => handleEdit(item.Id)}>Edit</Button>
-                                            </td>
-                                        )}
-                                    </tr>
-                                )
-                            })
-                            : null
-                        }
-                        </tbody>
-                    </Table>
-                    {role === 'Admin' && (
-                        <div style={{display: "flex", justifyContent: "center"}}>
-                            <AddUserModal token={token} afterSubmit={getData} />
-                        </div>
-                    )}
-                </div>
-                <EditUserModal
-                    show={show}
-                    handleClose={handleClose}
-                    editName={editName} setEditName={setEditName}
-                    editAge={editAge} setEditAge={setEditAge}
-                    editCountry={editCountry} setEditCountry={setEditCountry}
-                    editPosition={editPosition} setEditPosition={setEditPosition}
-                    editWage={editWage} setEditWage={setEditWage}
-                    handleUpdate={handleUpdate}
-                    role={role}
-                />
-            </Fragment>
                 )}
         </div>
     )

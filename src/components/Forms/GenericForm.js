@@ -1,6 +1,7 @@
 import React from 'react';
 import './GenericForm.css';
 import SignupBtn from "../Buttons/SignupBtn";
+import LoginBtn from "../Buttons/LoginBtn";
 
 const GenericForm = ({ title, fields, onSubmit, className }) => {
     return (
@@ -68,9 +69,11 @@ const GenericForm = ({ title, fields, onSubmit, className }) => {
                             return null;
                     }
                 })}
-                <div className="button-container">
+                { title && title == "SIGN UP" ? (<div className="button-container">
                     <SignupBtn></SignupBtn>
-                </div>
+                </div>) : <div className="button-container">
+                    <LoginBtn></LoginBtn>
+                </div>}
             </form>
         </div>
     );

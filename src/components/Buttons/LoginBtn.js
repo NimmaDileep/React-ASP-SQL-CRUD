@@ -4,7 +4,7 @@ import './button.css';
 
 function LoginBtn() {
     return (
-        <Button className="btn btn-primary login-btn" size="lg" active> Log In </Button>
+        <Button className="btn btn-primary login-btn" size="lg" type="submit" active> Log In </Button>
     );
 }
 export default LoginBtn;
