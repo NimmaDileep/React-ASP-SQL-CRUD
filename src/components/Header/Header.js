@@ -34,7 +34,7 @@ const Header = () => {
                         {/*{authRole === "Admin" && (*/}
                         {/*    <Link className={`styled-link ${location.pathname === "/dashboard" ? 'active' : ''}`} to="/dashboard">Dashboard</Link>*/}
                         {/*)}*/}
-                        {authRole === "User" && (
+                        {authRole === "User" ||  authRole === "Admin" && (
                             <Link className={`styled-link ${location.pathname === "/consultant" ? 'active' : ''}`} to="/consultant">Consultant Dashboard</Link>
                         )}
                         {authRole && (

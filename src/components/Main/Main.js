@@ -19,7 +19,6 @@ const Main = (props) => {
     const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     useEffect(() => {
-        console.log('------>AuthToken--->',authToken)
         if (!authToken) {
             setShowSuccessModal(true);
             navigate('/signin')

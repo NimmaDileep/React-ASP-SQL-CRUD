@@ -224,9 +224,10 @@ const ConsultantForm = () => {
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                         <option value="pending">Pending</option>
+                        <option value="pending">Pending</option>
+                        <option value="pending">Pending</option>
                     </select>
                 </div>
-
                 <button type="submit">Submit</button>
             </form>
         </div>
