@@ -22,9 +22,6 @@ namespace TokenAuth.API.Controllers
         [HttpGet]
         public HttpResponseMessage GetSubmissions()
         {
-            /* var submissions = dbContext.Submissions.ToList();
-             return Request.CreateResponse(HttpStatusCode.OK, submissions);*/
-
 
             var submissions = dbContext.Submissions.Select(s => new
             {
@@ -44,27 +41,13 @@ namespace TokenAuth.API.Controllers
 
 
 
-        /* [Authorize(Roles = "User, Admin, SuperUser")]
-         [Route("{id:int}")]
-         [HttpGet]
-         public HttpResponseMessage GetSubmissionById(int id)
-         {
-             var submission = dbContext.Submissions.FirstOrDefault(s => s.Id == id);
-             if (submission == null)
-             {
-                 return Request.CreateResponse(HttpStatusCode.NotFound);
-             }
-             return Request.CreateResponse(HttpStatusCode.OK, submission);
-         }*/
-
-
         [Authorize(Roles = "User, Admin, SuperUser")]
         [Route("{id:int}")]
         [HttpGet]
         public HttpResponseMessage GetSubmissionById(int id)
         {
             var submission = dbContext.Submissions
-                                      .Where(s => s.Id == id)
+                                      .Where(s => s.EmployeeId == id)
                                       .Select(s => new
                                       {
                                           s.Id,
@@ -76,8 +59,7 @@ namespace TokenAuth.API.Controllers
                                           s.VendorCompany,
                                           s.VendorName,
                                           s.Status
-                                      })
-                                      .FirstOrDefault();
+                                      });
 
             if (submission == null)
             {
@@ -88,25 +70,6 @@ namespace TokenAuth.API.Controllers
         }
 
 
-
-
-        /* [Authorize(Roles = "Admin")]
-         [Route("")]
-         [HttpPost]
-         public HttpResponseMessage PostSubmission(Submission submission)
-         {
-             var employee = dbContext.Employees.FirstOrDefault(e => e.Id == submission.EmployeeId);
-             if (employee == null)
-             {
-                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Employee not found.");
-             }
-
-             submission.Name = employee.Name;
-             dbContext.Submissions.Add(submission);
-             dbContext.SaveChanges();
-             return Request.CreateResponse(HttpStatusCode.Created, submission);
-         }
- */
 
 
         [Authorize(Roles = "Admin")]

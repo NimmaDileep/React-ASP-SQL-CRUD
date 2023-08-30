@@ -6,7 +6,7 @@ import './HeaderStyles.css';
 import AuthContext from "../AuthContext";
 import logo from './conquer-tech.png';
 
-const Header = () => {
+const Header = ({ setWasLoggedIn, setLogoutClicked }) => {
     const { setAuthToken, authToken, setAuthRole, authRole } = React.useContext(AuthContext);
     const location = useLocation();
     const [menuOpen, setMenuOpen] = useState(false);
@@ -15,6 +15,8 @@ const Header = () => {
         setAuthToken(null);
         setAuthRole(null);
         localStorage.clear();
+        setWasLoggedIn(false);
+        setLogoutClicked(true);
     };
 
     const toggleMenu = () => {
@@ -34,7 +36,7 @@ const Header = () => {
                         {/*{authRole === "Admin" && (*/}
                         {/*    <Link className={`styled-link ${location.pathname === "/dashboard" ? 'active' : ''}`} to="/dashboard">Dashboard</Link>*/}
                         {/*)}*/}
-                        {authRole === "User" ||  authRole === "Admin" && (
+                        {authRole === "User" && (
                             <Link className={`styled-link ${location.pathname === "/consultant" ? 'active' : ''}`} to="/consultant">Consultant Dashboard</Link>
                         )}
                         {authRole && (

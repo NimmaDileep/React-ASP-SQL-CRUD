@@ -7,7 +7,7 @@ header {
     top: 0;
     left: 0;
     z-index: 100;
-    background-color: lavender;
+    background: linear-gradient(270deg, rgba(0,16,45,1) 0%, #add8e6 56%);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     margin: auto;
 }

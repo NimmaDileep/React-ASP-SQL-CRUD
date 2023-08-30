@@ -221,11 +221,11 @@ const ConsultantForm = () => {
                         required
                     >
                         <option value="">Select status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="pending">Pending</option>
-                        <option value="pending">Pending</option>
-                        <option value="pending">Pending</option>
+                        <option value="Submitted">Submitted</option>
+                        <option value="Interviewed">Interviewed</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Rejected">Rejected</option>
+                        <option value="Accepted">Accepted</option>
                     </select>
                 </div>
                 <button type="submit">Submit</button>

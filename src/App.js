@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {BrowserRouter as Router} from 'react-router-dom';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -13,6 +13,8 @@ function App() {
     const [authToken, setAuthToken] = React.useState(initialToken);
     const [authRole, setAuthRole] = React.useState(initialRole);
     const [userData, setUserData] = React.useState(initialUserData);
+    const [wasLoggedIn, setWasLoggedIn] = useState(false);
+    const [logoutClicked, setLogoutClicked] = useState(false);
 
     React.useEffect(() => {
         if (authToken) {
@@ -35,7 +37,7 @@ function App() {
     return (
         <Router>
             <AuthContext.Provider value={{ authToken, setAuthToken, authRole, setAuthRole }}>
-                <Header />
+                <Header setWasLoggedIn={setWasLoggedIn} setLogoutClicked={setLogoutClicked} />
                 <Main authToken={authToken} />
                 <Footer />
             </AuthContext.Provider>

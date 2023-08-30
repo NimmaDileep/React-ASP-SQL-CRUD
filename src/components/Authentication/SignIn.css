@@ -5,14 +5,14 @@
     margin: auto;
 }
 
-.loader-container {
+.loader-container-signin {
     display: flex;
     justify-content: center;
     align-items: center;
     position: absolute;
     top: 0;
     right: 0;
-    bottom: 0;
+    bottom: 100px;
     left: 0;
     z-index: 10;
 }

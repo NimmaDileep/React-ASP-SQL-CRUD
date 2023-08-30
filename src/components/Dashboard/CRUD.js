@@ -1,4 +1,4 @@
-import  React, {useState, useEffect, Fragment}  from 'react';
+import  React, {useState, useEffect, Fragment, useContext}  from 'react';
 import Table from 'react-bootstrap/Table';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
@@ -14,6 +14,8 @@ import {FidgetSpinner} from 'react-loader-spinner';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Pagination } from 'react-bootstrap';
+import {GlobalContext} from "../States/GlobalState";
+import {useNavigate} from "react-router-dom";
 
 const CRUD  = () => {
     const { authToken, authRole } = React.useContext(AuthContext);
@@ -26,10 +28,9 @@ const CRUD  = () => {
     const [originalData, setOriginalData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 3;
+    const itemsPerPage = 5;
     const [totalPages, setTotalPages] = useState(0);
-
-    console.log('Role----->',role)
+    const { setSubmissions } = useContext(GlobalContext);
 
     const getData = async () => {
         setIsLoading(true);
@@ -61,6 +62,10 @@ const CRUD  = () => {
         }
     }, [token]);
 
+    useEffect(() => {
+        setTotalPages(Math.ceil(data.length / itemsPerPage));
+    }, [data]);
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -70,6 +75,7 @@ const CRUD  = () => {
     const [editCountry, setEditCountry] = useState('');
     const [editPosition, setEditPosition] = useState('');
     const [editWage,setEditWage] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         localStorage.setItem('editFormData', JSON.stringify({
@@ -116,6 +122,22 @@ const CRUD  = () => {
         )
     }
 
+    const handleSubmissions = (employeeId) => {
+        axios.get(`https://localhost:44316/api/Submission/${employeeId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then((res) => {
+                setSubmissions(res.data);
+                console.log("Submission Data ------------>", res.data)
+                navigate('/consultant')
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
     const handleDelete = (id) => {
         if(window.confirm('Are you sure you want to delete')) {
             axios.delete(`https://localhost:44316/api/Employee/${id}`, {
@@ -132,6 +154,7 @@ const CRUD  = () => {
                 })
         }
     }
+
 
     const handleSearchChange = (event) => {
         const searchTerm = event.target.value.toLowerCase();
@@ -177,7 +200,7 @@ const CRUD  = () => {
         <div className={`crudContainer_container ${isLoading ? 'disabledContainer' : ''}`}>
         <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
             {isLoading || !data.length ? (
-                <div className="crudContainer_loader-container">
+                <div className="loader-container">
                     <FidgetSpinner
                         height="100"
                         width="100"
@@ -195,7 +218,7 @@ const CRUD  = () => {
                 <div className="employeeCrudContainer">
                     <Fragment>
                         <Container>
-                            <Row>
+                            <Row className="m-lg-2">
                                 <Col md={8} xs={12} className="mb-3 mb-md-0">
                                     <div className="crudContainer_input-wrapper">
                                         <input className="form-control" type="text" placeholder="Search.." onChange={handleSearchChange} />
@@ -207,9 +230,6 @@ const CRUD  = () => {
                                     </Col>
                                 )}
                             </Row>
-                        </Container>
-                        <br/>
-                        <Container>
                         <div className= "container-fluid overflow-auto">
                         <Table striped bordered hover>
                             <thead>
@@ -239,7 +259,8 @@ const CRUD  = () => {
                                                     {role === 'Admin' && (
                                                         <Button variant="danger" onClick={() => handleDelete(item.Id)} style={{ marginRight: '10px' }}>Delete</Button>
                                                     )}
-                                                    <Button variant="info" onClick={() => handleEdit(item.Id)}>Edit</Button>
+                                                    <Button variant="info" onClick={() => handleEdit(item.Id)} style={{ marginRight: '10px' }}>Edit</Button>
+                                                    <Button variant="dark" onClick={() => handleSubmissions(item.Id)}>View Submissions</Button>
                                                 </td>
                                             )}
                                         </tr>

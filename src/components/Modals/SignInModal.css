@@ -1,34 +1,4 @@
-/*.signin-page {*/
-/*    width: 500px;*/
-/*    height: 250px;*/
-/*    margin: 50px auto;*/
-/*    padding: 20px;*/
-/*    border: 1px solid #ccc;*/
-/*    border-radius: 10px;*/
-/*    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);*/
-/*    background-color: #ffffff;*/
-/*}*/
 
-/*.signin-page h2 {*/
-/*    text-align: center;*/
-/*    margin-bottom: 20px;*/
-/*}*/
-
-/*.signin-page .input-username-row {*/
-/*    margin-bottom: 15px;*/
-/*}*/
-
-
-/*.signin-page .input-password-row{*/
-/*    margin-bottom: 15px;*/
-/*}*/
-
-
-/*.signin-page button {*/
-/*    display: block;*/
-/*    width: 100px;*/
-/*    margin: 10px auto; !* This will center the button *!*/
-/*}*/
 
 .signin-page {
     max-width: 500px;

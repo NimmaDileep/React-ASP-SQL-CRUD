@@ -54,7 +54,6 @@ const SignIn = () => {
 
         try {
             setIsLoading(true);
-
             const response = await axios.post('https://localhost:44316/token', params, config);
             const userRes = await axios.get(`https://localhost:44316/api/user/${username.value}`);
             localStorage.setItem('accessToken', response.data.access_token);
@@ -62,8 +61,12 @@ const SignIn = () => {
             localStorage.setItem('userData', JSON.stringify(userRes.data));
             setAuthToken(response.data.access_token);
             setAuthRole(userRes.data.Roles);
-
-            navigate('/employees');
+            if(userRes.data.Roles == 'Admin'){
+                navigate('/employees');
+            }
+            else{
+                navigate('/consultant');
+            }
         } catch (error) {
             alert('Failed to sign in. Please check your credentials.');
         } finally {
@@ -74,7 +77,7 @@ const SignIn = () => {
     return (
         <div className={`signin-container ${isLoading ? 'disabled-form' : ''}`}>
         {isLoading && (
-                <div className="loader-container">
+                <div className="loader-container-signin">
                     <FidgetSpinner
                         height="100"
                         width="100"

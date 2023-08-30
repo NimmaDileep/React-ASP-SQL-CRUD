@@ -1,3 +1,7 @@
+.chart-container{
+
+}
+
 .consultant-dashboard {
     display: flex;
     justify-content: space-between;
@@ -5,7 +9,18 @@
     gap: 20px;
 }
 
-.consultant-dashboard .chart-container,
+.consultant-dashboard .chart-container{
+    flex: 1;
+    padding: 20px;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: aliceblue;
+    overflow: auto;
+    max-width: 35%;
+}
+
 .consultant-dashboard .table-container {
     flex: 1;
     padding: 20px;
@@ -22,6 +37,13 @@
     text-align: center;
     margin-bottom: 20px;
     color: black;
+}
+
+.consultant-dashboard-search{
+    max-width: 1000px;
+    width: 100%;
+    border-radius: 8px;
+    border-color: #4a4a4a;
 }
 
 .consultant-dashboard table {
@@ -56,22 +78,21 @@
     background-color: #ddd;
 }
 
-/* Mobile Styles (let's assume 768px as breakpoint for tablet/mobile screens) */
 @media screen and (max-width: 768px) {
     .consultant-dashboard {
         flex-direction: column;
-        align-items: center; /* Center items horizontally since flex direction is column */
+        align-items: center;
     }
 
     .consultant-dashboard .chart-container,
     .consultant-dashboard .table-container {
-        max-width: 100%; /* Make sure the containers don't exceed the width of the parent on smaller screens */
-        flex-basis: auto; /* Reset the flex basis so that they equally take the available space */
-        margin: 10px 0; /* Adjust margin for smaller screens */
+        max-width: 100%;
+        flex-basis: auto;
+        margin: 10px 0;
     }
 
     .consultant-dashboard .chart-container h2,
     .consultant-dashboard .table-container h3 {
-        font-size: 1.25rem; /* Reduce font size for headings on smaller screens if necessary */
+        font-size: 1.25rem;
     }
 }
