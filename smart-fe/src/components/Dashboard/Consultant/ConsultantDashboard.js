@@ -20,7 +20,7 @@ const ConsultantDashboard = () => {
     const navigate = useNavigate();
     const [search, setSearch] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 4;
+    const itemsPerPage = 3;
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentSubmission, setCurrentSubmission] = useState(null);
 

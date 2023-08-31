@@ -8,6 +8,7 @@ import { Modal, Button } from 'react-bootstrap';
 const SignUp = () => {
     const navigate = useNavigate();
     const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [error, setError] = useState(false);
 
     const fields = [
         {
@@ -46,8 +47,13 @@ const SignUp = () => {
         const { username, email, password, confirmPassword } = event.target.elements;
 
         if (password.value !== confirmPassword.value) {
-            console.log('Passwords do not match!'); // You might want to display this in the UI.
+            console.log('Passwords do not match!');
+            setError(true)
+            alert("Passwords do not match!")
             return;
+        }
+        else{
+            setError(false)
         }
 
         const url = "https://localhost:44316/api/user";
