@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="81c18aa0-1a79-4b20-aae3-37bfcf8fafd2" name="Changes" comment="" />
+    <list default="true" id="81c18aa0-1a79-4b20-aae3-37bfcf8fafd2" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smart-fe/src/TestExtraCode/SignIn.css" beforeDir="false" afterPath="$PROJECT_DIR$/smart-fe/src/TestExtraCode/SignIn.css" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -91,6 +94,9 @@
       <workItem from="1693403025605" duration="15487000" />
       <workItem from="1693494609472" duration="3242000" />
       <workItem from="1693501006005" duration="26000" />
+      <workItem from="1693501609331" duration="47000" />
+      <workItem from="1693501672941" duration="46000" />
+      <workItem from="1693501766670" duration="185000" />
     </task>
     <servers />
   </component>
